@@ -1,4 +1,4 @@
-import { useState } from "react/cjs/react.development";
+import React, { useState } from "react";
 import AddPlayer from "./components/addPlayer";
 import Players from "./components/players";
 

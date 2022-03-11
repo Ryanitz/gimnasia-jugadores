@@ -1,5 +1,5 @@
 import { gql } from "@apollo/client";
-import { useState, useEffect } from "react/cjs/react.development";
+import React, { useState, useEffect } from "react";
 import client from "../../apollo-client";
 
 export default function Players() {

@@ -1,5 +1,5 @@
-import { useState } from "react/cjs/react.development";
-import { gql, useMutation } from "@apollo/client";
+import React, { useState } from "react";
+import { gql } from "@apollo/client";
 import client from "../../apollo-client";
 
 export default function AddPlayer() {
