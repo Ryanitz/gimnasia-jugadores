@@ -5,6 +5,7 @@ export default function Players({ setIsLoading }) {
   const [players, setPlayers] = useState([]);
 
   const removePlayer = async (aPlayerId) => {
+    setIsLoading(true);
     setPlayers(await removePlayerRequest(aPlayerId));
   };
 
