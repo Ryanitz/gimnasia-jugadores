@@ -23,7 +23,7 @@ export default function Home() {
     <div>
       {isLoading && <Loading />}
       {tabsComponents[activeTab]}
-      <div className="tabs w-full z-50 fixed bottom-0 bg-white">
+      <div className="tabs w-full z-40 fixed bottom-0 bg-white">
         {tabs.map((tab) => (
           <a
             key={tab}
