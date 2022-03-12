@@ -1,60 +1,18 @@
-import { gql } from "@apollo/client";
 import React, { useState, useEffect } from "react";
-import client from "../../apollo-client";
+import { getPlayersRequest, removePlayerRequest } from "../api/requests";
 
 export default function Players() {
   const [players, setPlayers] = useState([]);
 
-  const getPlayers = async () => {
-    const response = await client.query({
-      query: gql`
-        query Query {
-          queryPlayer {
-            id
-            name
-            surname
-          }
-        }
-      `,
-    });
-    const players = response.data.queryPlayer.map(({ id, name, surname }) => {
-      return {
-        id,
-        name,
-        surname,
-      };
-    });
-
-    console.log(players);
-
-    setPlayers(players);
+  const removePlayer = async (aPlayerId) => {
+    setPlayers(await removePlayerRequest(aPlayerId));
   };
 
-  const REMOVE_PLAYER = gql`
-    mutation Mutation($filter: PlayerFilter!) {
-      deletePlayer(filter: $filter) {
-        msg
-      }
-    }
-  `;
-
-  const removePlayer = async (aPlayerId) => {
-    const response = await client.mutate({
-      mutation: REMOVE_PLAYER,
-      variables: {
-        filter: {
-          id: aPlayerId,
-        },
-      },
-    });
-
-    console.log(response);
-
-    getPlayers();
+  const getPlayers = async () => {
+    setPlayers(await getPlayersRequest());
   };
 
   useEffect(() => {
-    console.log("TEST");
     getPlayers();
   }, []);
 

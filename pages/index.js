@@ -1,10 +1,17 @@
 import React, { useState } from "react";
 import AddPlayer from "./components/addPlayer";
+import Payments from "./components/payments";
 import Players from "./components/players";
 
 export default function Home() {
   const [activeTab, setActiveTab] = useState("Jugadores");
-  const tabs = ["Agregar", "Jugadores"];
+  const tabs = ["Agregar", "Jugadores", "Pagos"];
+
+  const tabsComponents = {
+    Agregar: <AddPlayer switchToPlayersTab={() => setActiveTab("Jugadores")} />,
+    Jugadores: <Players />,
+    Pagos: <Payments />,
+  };
   return (
     <div>
       <div className="tabs w-full z-50 relative">
@@ -20,8 +27,7 @@ export default function Home() {
           </a>
         ))}
       </div>
-      {activeTab === tabs[0] && <AddPlayer />}
-      {activeTab === tabs[1] && <Players />}
+      {tabsComponents[activeTab]}
     </div>
   );
 }

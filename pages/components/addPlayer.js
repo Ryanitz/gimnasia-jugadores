@@ -1,8 +1,9 @@
 import React, { useState } from "react";
 import { gql } from "@apollo/client";
 import client from "../../apollo-client";
+import { addPlayerRequest } from "../api/requests";
 
-export default function AddPlayer() {
+export default function AddPlayer({ switchToPlayersTab }) {
   const [playerName, setPlayerName] = useState("");
   const [playerSurname, setPlayerSurname] = useState("");
 
@@ -19,17 +20,9 @@ export default function AddPlayer() {
   `;
 
   const addPlayer = async () => {
-    const response = await client.mutate({
-      mutation: ADD_PLAYER,
-      variables: {
-        input: {
-          name: playerName,
-          surname: playerSurname,
-        },
-      },
-    });
+    await addPlayerRequest(playerName, playerSurname);
 
-    console.log(response);
+    switchToPlayersTab();
   };
 
   return (
