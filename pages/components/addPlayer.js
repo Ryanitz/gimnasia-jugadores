@@ -3,7 +3,7 @@ import { gql } from "@apollo/client";
 import client from "../../apollo-client";
 import { addPlayerRequest } from "../api/requests";
 
-export default function AddPlayer({ switchToPlayersTab }) {
+export default function AddPlayer({ switchToPlayersTab, setIsLoading }) {
   const [playerName, setPlayerName] = useState("");
   const [playerSurname, setPlayerSurname] = useState("");
 
@@ -20,6 +20,7 @@ export default function AddPlayer({ switchToPlayersTab }) {
   `;
 
   const addPlayer = async () => {
+    setIsLoading(true);
     await addPlayerRequest(playerName, playerSurname);
 
     switchToPlayersTab();

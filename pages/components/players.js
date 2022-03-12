@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { getPlayersRequest, removePlayerRequest } from "../api/requests";
 
-export default function Players() {
+export default function Players({ setIsLoading }) {
   const [players, setPlayers] = useState([]);
 
   const removePlayer = async (aPlayerId) => {
@@ -10,9 +10,11 @@ export default function Players() {
 
   const getPlayers = async () => {
     setPlayers(await getPlayersRequest());
+    setIsLoading(false);
   };
 
   useEffect(() => {
+    setIsLoading(true);
     getPlayers();
   }, []);
 

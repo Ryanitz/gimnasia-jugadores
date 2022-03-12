@@ -8,7 +8,7 @@ import {
 } from "../api/requests";
 import PlayerPayments from "./playerPayments";
 
-export default function Payments() {
+export default function Payments({ setIsLoading }) {
   const [players, setPlayers] = useState([]);
   const [payer, setPayer] = useState("");
   const [subjects, setSubjects] = useState([]);
@@ -18,13 +18,17 @@ export default function Payments() {
 
   const getPlayers = async () => {
     setPlayers(await getPlayersRequest());
+    getSubjects();
   };
 
   const getPlayerPayments = async () => {
     setPlayerPayments(await getPlayerPaymentsRequest(payer));
+
+    setIsLoading(false);
   };
 
   const registerPayment = async () => {
+    setIsLoading(true);
     await registerPaymentRequest(
       payer,
       subjects[selectedSubject].name,
@@ -35,16 +39,19 @@ export default function Payments() {
   };
 
   const removePayment = async (aPaymentId) => {
+    setIsLoading(true);
     setPlayerPayments(await removePaymentRequest(payer, aPaymentId));
+    setIsLoading(false);
   };
 
   const getSubjects = async () => {
     setSubjects(await getSubjectsRequest());
+    setIsLoading(false);
   };
 
   useEffect(() => {
+    setIsLoading(true);
     getPlayers();
-    getSubjects();
   }, []);
 
   useEffect(() => {
