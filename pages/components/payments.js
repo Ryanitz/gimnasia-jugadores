@@ -49,6 +49,13 @@ export default function Payments({ setIsLoading }) {
     setIsLoading(false);
   };
 
+  const changeSubject = (aSubjectIndex) => {
+    setSelectedSubject(aSubjectIndex);
+    setPayingAmount(subjects[aSubjectIndex].amount);
+    const amountInput = document.getElementById("amount");
+    if (amountInput) amountInput.value = subjects[aSubjectIndex].amount;
+  };
+
   useEffect(() => {
     setIsLoading(true);
     getPlayers();
@@ -79,8 +86,7 @@ export default function Payments({ setIsLoading }) {
         defaultValue=""
         className="select select-bordered w-full mb-4"
         onChange={(e) => {
-          setSelectedSubject(e.target.value);
-          setPayingAmount(subjects[e.target.value].amount);
+          changeSubject(e.target.value);
         }}
       >
         <option disabled value="">
@@ -97,8 +103,8 @@ export default function Payments({ setIsLoading }) {
         <input
           id="amount"
           type="number"
-          defaultValue={subjects[selectedSubject].amount}
           placeholder="Ingrese monto"
+          defaultValue={subjects[selectedSubject].amount}
           className="input input-bordered w-full mb-4"
           onChange={(e) => setPayingAmount(e.target.value)}
         />
