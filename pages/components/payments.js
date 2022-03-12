@@ -97,7 +97,7 @@ export default function Payments({ setIsLoading }) {
         <input
           id="amount"
           type="number"
-          value={subjects[selectedSubject].amount}
+          defaultValue={subjects[selectedSubject].amount}
           placeholder="Ingrese monto"
           className="input input-bordered w-full mb-4"
           onChange={(e) => setPayingAmount(e.target.value)}
