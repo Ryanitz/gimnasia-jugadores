@@ -20,14 +20,16 @@ export default function AddPlayer({ switchToPlayersTab, setIsLoading }) {
   `;
 
   const addPlayer = async () => {
-    setIsLoading(true);
-    await addPlayerRequest(playerName, playerSurname);
+    if (playerName !== "" && playerSurname !== "") {
+      setIsLoading(true);
+      await addPlayerRequest(playerName, playerSurname);
 
-    switchToPlayersTab();
+      switchToPlayersTab();
+    }
   };
 
   return (
-    <div className="flex flex-col justify-center px-4 py-8 absolute w-screen md:w-1/2 top-0 bottom-0 left-0 right-0 m-auto z-10">
+    <div className="flex flex-col justify-center px-4 pt-4 pb-16 w-screen max-h-screen overflow-y-auto md:w-1/2 m-auto z-10">
       <input
         type="text"
         placeholder="Nombre"

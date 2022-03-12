@@ -28,14 +28,16 @@ export default function Payments({ setIsLoading }) {
   };
 
   const registerPayment = async () => {
-    setIsLoading(true);
-    await registerPaymentRequest(
-      payer,
-      subjects[selectedSubject].name,
-      parseInt(payingAmount)
-    );
+    if (payer !== "" && selectedSubject >= 0 && payingAmount !== "") {
+      setIsLoading(true);
+      await registerPaymentRequest(
+        payer,
+        subjects[selectedSubject].name,
+        parseInt(payingAmount)
+      );
 
-    getPlayerPayments();
+      getPlayerPayments();
+    }
   };
 
   const removePayment = async (aPaymentId) => {
@@ -66,7 +68,7 @@ export default function Payments({ setIsLoading }) {
   }, [payer]);
 
   return (
-    <div className="w-full md:w-1/2 p-4 mx-auto flex flex-col">
+    <div className="w-full md:w-1/2 px-4 pt-4 pb-16 max-h-screen mx-auto flex flex-col overflow-y-auto">
       <select
         id="payer"
         defaultValue=""
@@ -105,7 +107,7 @@ export default function Payments({ setIsLoading }) {
           type="number"
           placeholder="Ingrese monto"
           defaultValue={subjects[selectedSubject].amount}
-          className="input input-bordered w-full mb-4"
+          className="input input-min-height input-bordered w-full mb-4"
           onChange={(e) => setPayingAmount(e.target.value)}
         />
       )}

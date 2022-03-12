@@ -19,7 +19,7 @@ export default function Players({ setIsLoading }) {
   }, []);
 
   return (
-    <div className="overflow-x-auto">
+    <div className="overflow-auto pb-16">
       <table className="table w-full">
         <thead>
           <tr>

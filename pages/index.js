@@ -22,7 +22,8 @@ export default function Home() {
   return (
     <div>
       {isLoading && <Loading />}
-      <div className="tabs w-full z-50 relative">
+      {tabsComponents[activeTab]}
+      <div className="tabs w-full z-50 fixed bottom-0 bg-white">
         {tabs.map((tab) => (
           <a
             key={tab}
@@ -35,7 +36,6 @@ export default function Home() {
           </a>
         ))}
       </div>
-      {tabsComponents[activeTab]}
     </div>
   );
 }

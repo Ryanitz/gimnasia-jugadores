@@ -18,3 +18,7 @@ a {
 * {
   box-sizing: border-box;
 }
+
+.input-min-height {
+  min-height: 3rem;
+}
