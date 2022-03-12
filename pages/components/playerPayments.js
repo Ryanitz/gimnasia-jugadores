@@ -13,16 +13,20 @@ export default function PlayerPayments({ playerPayments, removePayment }) {
           </tr>
         </thead>
         <tbody>
-          {playerPayments.map(({ subject, amount, id }, index) => (
-            <tr key={index} className="hover">
-              <th>{index + 1}</th>
-              <td>{subject}</td>
-              <td>${amount}</td>
-              <td onClick={() => removePayment(id)} className="cursor-pointer">
-                Borrar
-              </td>
-            </tr>
-          ))}
+          {playerPayments &&
+            playerPayments.map(({ subject, amount, id }, index) => (
+              <tr key={index} className="hover">
+                <th>{index + 1}</th>
+                <td>{subject}</td>
+                <td>${amount}</td>
+                <td
+                  onClick={() => removePayment(id)}
+                  className="cursor-pointer"
+                >
+                  Borrar
+                </td>
+              </tr>
+            ))}
         </tbody>
       </table>
     </div>
