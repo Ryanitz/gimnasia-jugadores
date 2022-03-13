@@ -54,11 +54,11 @@ export default function AddPlayer({ switchToPlayersTab, setIsLoading }) {
         className="input input-bordered w-full mb-4"
         onChange={(e) => setPlayerSurname(e.target.value)}
       />
-      <button className="btn mb-4" onClick={addPlayer}>
+      <button className="btn" onClick={addPlayer}>
         Agregar Jugador
       </button>
-      <hr />
-      <button className="btn mt-4" onClick={uploadFile}>
+      <hr className="hidden mt-4" />
+      <button className="hidden btn mt-4" onClick={uploadFile}>
         Cargar lista
       </button>
       <input
