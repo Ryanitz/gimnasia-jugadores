@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { getPlayersRequest, removePlayerRequest } from "../api/requests";
+import TrashIcon from "./TrashIcon";
 
 export default function Players({ setIsLoading }) {
   const [players, setPlayers] = useState([]);
@@ -28,18 +29,22 @@ export default function Players({ setIsLoading }) {
             <th></th>
             <th>Nombre</th>
             <th>Apellido</th>
-            <th></th>
           </tr>
         </thead>
         <tbody>
           {players.map(({ name, surname, id }, index) => (
             <tr key={index} className="hover">
-              <th>{index + 1}</th>
+              <th className="flex">
+                {index + 1}
+                <span
+                  onClick={() => removePlayer(id)}
+                  className="ml-2 cursor-pointer"
+                >
+                  <TrashIcon />
+                </span>
+              </th>
               <td>{name}</td>
               <td>{surname}</td>
-              <td onClick={() => removePlayer(id)} className="cursor-pointer">
-                Borrar
-              </td>
             </tr>
           ))}
         </tbody>

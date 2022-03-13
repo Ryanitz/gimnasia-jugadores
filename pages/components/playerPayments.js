@@ -1,3 +1,5 @@
+import TrashIcon from "./TrashIcon";
+
 export default function PlayerPayments({ playerPayments, removePayment }) {
   return (
     <div className="">
@@ -23,7 +25,7 @@ export default function PlayerPayments({ playerPayments, removePayment }) {
                   onClick={() => removePayment(id)}
                   className="cursor-pointer"
                 >
-                  Borrar
+                  <TrashIcon />
                 </td>
               </tr>
             ))}

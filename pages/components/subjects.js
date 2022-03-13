@@ -4,6 +4,7 @@ import {
   registerSubjectRequest,
   removeSubjectRequest,
 } from "../api/requests";
+import TrashIcon from "./TrashIcon";
 
 export default function Subjects({ setIsLoading }) {
   const [subjects, setSubjects] = useState([]);
@@ -66,28 +67,33 @@ export default function Subjects({ setIsLoading }) {
         Agregar asunto
       </button>
 
-      <table className="table w-full">
-        <thead>
-          <tr>
-            <th></th>
-            <th>Asunto</th>
-            <th>Monto ($)</th>
-            <th></th>
-          </tr>
-        </thead>
-        <tbody>
-          {subjects.map(({ name, amount, id }, index) => (
-            <tr key={index} className="hover">
-              <th>{index + 1}</th>
-              <td>{name}</td>
-              <td>${amount}</td>
-              <td onClick={() => removeSubject(id)} className="cursor-pointer">
-                Borrar
-              </td>
+      {subjects.length > 0 && (
+        <table className="table w-full">
+          <thead>
+            <tr>
+              <th></th>
+              <th>Asunto</th>
+              <th>Monto ($)</th>
+              <th></th>
             </tr>
-          ))}
-        </tbody>
-      </table>
+          </thead>
+          <tbody>
+            {subjects.map(({ name, amount, id }, index) => (
+              <tr key={index} className="hover">
+                <th>{index + 1}</th>
+                <td>{name}</td>
+                <td>${amount}</td>
+                <td
+                  onClick={() => removeSubject(id)}
+                  className="cursor-pointer"
+                >
+                  <TrashIcon />
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      )}
     </div>
   );
 }
