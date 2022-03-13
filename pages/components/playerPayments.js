@@ -8,7 +8,7 @@ export default function PlayerPayments({ playerPayments, removePayment }) {
           <tr>
             <th></th>
             <th>Asunto</th>
-            <th>Monto</th>
+            <th>Monto ($)</th>
             <th></th>
           </tr>
         </thead>

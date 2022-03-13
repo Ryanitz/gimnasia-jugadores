@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { gql } from "@apollo/client";
 import client from "../../apollo-client";
-import { addPlayerRequest } from "../api/requests";
+import { registerPlayerRequest } from "../api/requests";
 
 export default function AddPlayer({ switchToPlayersTab, setIsLoading }) {
   const [playerName, setPlayerName] = useState("");
@@ -22,14 +22,14 @@ export default function AddPlayer({ switchToPlayersTab, setIsLoading }) {
   const addPlayer = async () => {
     if (playerName !== "" && playerSurname !== "") {
       setIsLoading(true);
-      await addPlayerRequest(playerName, playerSurname);
+      await registerPlayerRequest(playerName, playerSurname);
 
       switchToPlayersTab();
     }
   };
 
   return (
-    <div className="flex flex-col justify-center px-4 pt-4 pb-16 w-screen max-h-screen overflow-y-auto md:w-1/2 m-auto z-10">
+    <div className="flex flex-col justify-center px-4 pb-16 w-screen max-h-screen overflow-y-auto md:w-1/2 m-auto z-10">
       <input
         type="text"
         placeholder="Nombre"

@@ -1,13 +1,6 @@
 import { gql } from "@apollo/client";
 import client from "../../apollo-client";
 
-const REMOVE_PLAYER = gql`
-  mutation Mutation($filter: PlayerFilter!) {
-    deletePlayer(filter: $filter) {
-      msg
-    }
-  }
-`;
 const GET_PLAYERS = gql`
   query Query {
     queryPlayer(order: { asc: surname, then: { asc: name } }) {
@@ -49,9 +42,34 @@ const REGISTER_PAYMENT = gql`
     }
   }
 `;
+const REGISTER_SUBJECT = gql`
+  mutation Mutation($input: [AddSubjectInput!]!) {
+    addSubject(input: $input) {
+      subject {
+        id
+        name
+        amount
+      }
+    }
+  }
+`;
+const REMOVE_PLAYER = gql`
+  mutation Mutation($filter: PlayerFilter!) {
+    deletePlayer(filter: $filter) {
+      msg
+    }
+  }
+`;
 const REMOVE_PAYMENT = gql`
   mutation Mutation($filter: PaymentFilter!) {
     deletePayment(filter: $filter) {
+      msg
+    }
+  }
+`;
+const REMOVE_SUBJECT = gql`
+  mutation Mutation($filter: SubjectFilter!) {
+    deleteSubject(filter: $filter) {
       msg
     }
   }
@@ -71,7 +89,6 @@ export const getPlayersRequest = async () => {
 
   return players;
 };
-
 export const getSubjectsRequest = async () => {
   const response = await client.query({
     query: GET_SUBJECTS,
@@ -86,50 +103,6 @@ export const getSubjectsRequest = async () => {
 
   return subjects;
 };
-
-export const removePlayerRequest = async (aPlayerId) => {
-  await client.mutate({
-    mutation: REMOVE_PLAYER,
-    variables: {
-      filter: {
-        id: aPlayerId,
-      },
-    },
-  });
-
-  return await getPlayersRequest();
-};
-
-export const addPlayerRequest = async (aPlayerName, aPlayerSurname) => {
-  await client.mutate({
-    mutation: ADD_PLAYER,
-    variables: {
-      input: {
-        name: aPlayerName,
-        surname: aPlayerSurname,
-      },
-    },
-  });
-};
-
-export const registerPaymentRequest = async (
-  aPlayerId,
-  aSubject,
-  aPayingAmount
-) => {
-  await client.mutate({
-    mutation: REGISTER_PAYMENT,
-    variables: {
-      input: {
-        payer: aPlayerId,
-        amount: aPayingAmount,
-        subject: aSubject,
-        payingDate: new Date(),
-      },
-    },
-  });
-};
-
 export const getPlayerPaymentsRequest = async (aPlayerId) => {
   const response = await client.query({
     query: gql`
@@ -159,6 +132,60 @@ export const getPlayerPaymentsRequest = async (aPlayerId) => {
   return payments;
 };
 
+export const registerPlayerRequest = async (aPlayerName, aPlayerSurname) => {
+  await client.mutate({
+    mutation: ADD_PLAYER,
+    variables: {
+      input: {
+        name: aPlayerName,
+        surname: aPlayerSurname,
+      },
+    },
+  });
+};
+export const registerPaymentRequest = async (
+  aPlayerId,
+  aSubject,
+  aPayingAmount
+) => {
+  await client.mutate({
+    mutation: REGISTER_PAYMENT,
+    variables: {
+      input: {
+        payer: aPlayerId,
+        amount: aPayingAmount,
+        subject: aSubject,
+        payingDate: new Date(),
+      },
+    },
+  });
+};
+export const registerSubjectRequest = async (aSubjectName, aSubjectAmount) => {
+  await client.mutate({
+    mutation: REGISTER_SUBJECT,
+    variables: {
+      input: {
+        name: aSubjectName,
+        amount: aSubjectAmount,
+      },
+    },
+  });
+
+  return await getSubjectsRequest();
+};
+
+export const removePlayerRequest = async (aPlayerId) => {
+  await client.mutate({
+    mutation: REMOVE_PLAYER,
+    variables: {
+      filter: {
+        id: aPlayerId,
+      },
+    },
+  });
+
+  return await getPlayersRequest();
+};
 export const removePaymentRequest = async (aPlayerId, aPaymentId) => {
   await client.mutate({
     mutation: REMOVE_PAYMENT,
@@ -170,4 +197,16 @@ export const removePaymentRequest = async (aPlayerId, aPaymentId) => {
   });
 
   return await getPlayerPaymentsRequest(aPlayerId);
+};
+export const removeSubjectRequest = async (aSubjectId) => {
+  await client.mutate({
+    mutation: REMOVE_SUBJECT,
+    variables: {
+      filter: {
+        id: aSubjectId,
+      },
+    },
+  });
+
+  return await getSubjectsRequest();
 };
