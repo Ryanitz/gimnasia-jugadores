@@ -67,6 +67,7 @@ export default function Payments({ setIsLoading }) {
         calculateDebt()
       );
 
+      getPlayers();
       getPlayerPayments();
     }
   };
@@ -229,6 +230,7 @@ export default function Payments({ setIsLoading }) {
           playerPayments={playerPayments}
           removePayment={removePayment}
           payOffDebt={payOffDebt}
+          isAdmin={true}
         />
       )}
     </div>

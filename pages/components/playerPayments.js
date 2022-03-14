@@ -2,9 +2,8 @@ export default function PlayerPayments({
   playerPayments,
   removePayment,
   payOffDebt,
+  isAdmin,
 }) {
-  const isAdmin = window.location.pathname.includes("admin");
-
   const convertDateToText = (aDate) => {
     const date = new Date(aDate);
 
