@@ -7,6 +7,7 @@ const GET_PLAYERS = gql`
       id
       name
       surname
+      payingType
     }
   }
 `;
@@ -16,6 +17,8 @@ const GET_SUBJECTS = gql`
       id
       name
       amount
+      dueDate
+      type
     }
   }
 `;
@@ -79,13 +82,16 @@ export const getPlayersRequest = async () => {
   const response = await client.query({
     query: GET_PLAYERS,
   });
-  const players = response.data.queryPlayer.map(({ id, name, surname }) => {
-    return {
-      id,
-      name,
-      surname,
-    };
-  });
+  const players = response.data.queryPlayer.map(
+    ({ id, name, surname, payingType }) => {
+      return {
+        id,
+        name,
+        surname,
+        payingType,
+      };
+    }
+  );
 
   return players;
 };
@@ -93,13 +99,17 @@ export const getSubjectsRequest = async () => {
   const response = await client.query({
     query: GET_SUBJECTS,
   });
-  const subjects = response.data.querySubject.map(({ id, name, amount }) => {
-    return {
-      id,
-      name,
-      amount,
-    };
-  });
+  const subjects = response.data.querySubject.map(
+    ({ id, name, amount, type, dueDate }) => {
+      return {
+        id,
+        name,
+        amount,
+        dueDate,
+        type,
+      };
+    }
+  );
 
   return subjects;
 };
@@ -113,18 +123,20 @@ export const getPlayerPaymentsRequest = async (aPlayerId) => {
           amount
           subject
           payingDate
+          debt
         }
       }
     `,
   });
   const payments = response.data.queryPayment.map(
-    ({ id, payer, amount, subject, payingDate }) => {
+    ({ id, payer, amount, subject, payingDate, debt }) => {
       return {
         id,
         payer,
         amount,
         subject,
         payingDate,
+        debt,
       };
     }
   );
@@ -147,7 +159,8 @@ export const registerPaymentRequest = async (
   aPlayerId,
   aSubject,
   aPayingAmount,
-  aPayingDate
+  aPayingDate,
+  aPayingDebt
 ) => {
   await client.mutate({
     mutation: REGISTER_PAYMENT,
@@ -157,23 +170,28 @@ export const registerPaymentRequest = async (
         amount: aPayingAmount,
         subject: aSubject,
         payingDate: aPayingDate,
+        debt: aPayingDebt,
       },
     },
   });
 };
 export const registerSubjectRequest = async (
   aSubjectName,
+  aSubjectType,
   aSubjectAmount,
-  aSubjectType
+  aSubjectDueDate
 ) => {
+  let input = {
+    name: aSubjectName,
+    type: aSubjectType,
+  };
+  if (aSubjectType === "cuota") input.dueDate = aSubjectDueDate;
+  else input.amount = aSubjectAmount;
+
   await client.mutate({
     mutation: REGISTER_SUBJECT,
     variables: {
-      input: {
-        name: aSubjectName,
-        amount: aSubjectAmount,
-        type: aSubjectType,
-      },
+      input,
     },
   });
 
@@ -215,4 +233,51 @@ export const removeSubjectRequest = async (aSubjectId) => {
   });
 
   return await getSubjectsRequest();
+};
+
+export const updatePlayerPayingTypeRequest = async (aPlayerId, aPayingType) => {
+  await client.mutate({
+    mutation: gql`
+      mutation Mutation($id: [ID!], $payingType: Int!) {
+        updatePlayer(
+          input: { filter: { id: $id }, set: { payingType: $payingType } }
+        ) {
+          player {
+            id
+          }
+        }
+      }
+    `,
+    variables: {
+      id: aPlayerId,
+      payingType: aPayingType,
+    },
+  });
+};
+export const updatePaymentDebtRequest = async (
+  aPlayerId,
+  aPaymentId,
+  aPayingDebt,
+  aPayingAmount
+) => {
+  await client.mutate({
+    mutation: gql`
+      mutation Mutation($id: [ID!], $debt: Int!, $amount: Int!) {
+        updatePayment(
+          input: { filter: { id: $id }, set: { debt: $debt, amount: $amount } }
+        ) {
+          payment {
+            id
+          }
+        }
+      }
+    `,
+    variables: {
+      id: aPaymentId,
+      debt: aPayingDebt,
+      amount: aPayingAmount,
+    },
+  });
+
+  return getPlayerPaymentsRequest(aPlayerId);
 };

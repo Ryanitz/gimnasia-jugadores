@@ -5,17 +5,42 @@ import {
   getSubjectsRequest,
   registerPaymentRequest,
   removePaymentRequest,
+  updatePaymentDebtRequest,
+  updatePlayerPayingTypeRequest,
 } from "../api/requests";
 import PlayerPayments from "./playerPayments";
 
 export default function Payments({ setIsLoading }) {
   const [players, setPlayers] = useState([]);
-  const [payer, setPayer] = useState("");
+  const [payer, setPayer] = useState(-1);
   const [subjects, setSubjects] = useState([]);
   const [selectedSubject, setSelectedSubject] = useState(-1);
   const [payingAmount, setPayingAmount] = useState(0);
   const [playerPayments, setPlayerPayments] = useState([]);
   const [date, setDate] = useState("");
+
+  const setPayingAmountCuota = (aPayerIndex) => {
+    let value = 0;
+    if (aPayerIndex !== -1 && players[aPayerIndex].payingType !== 0) {
+      value = feeValues[players[aPayerIndex].payingType];
+    }
+    setPayingAmount(value);
+    const amountInput = document.getElementById("amount");
+    if (amountInput) amountInput.value = value !== 0 ? value : "";
+  };
+  const setPayingAmountNormal = (aSubjectIndex) => {
+    console.log(subjects[aSubjectIndex]);
+    setPayingAmount(subjects[aSubjectIndex].amount);
+    const amountInput = document.getElementById("amount");
+    if (amountInput) amountInput.value = subjects[aSubjectIndex].amount;
+  };
+
+  const settingAmount = {
+    cuota: setPayingAmountCuota,
+    normal: setPayingAmountNormal,
+  };
+
+  const feeValues = [0, 1700, 2700, 4000, 6000, 12000];
 
   const getPlayers = async () => {
     setPlayers(await getPlayersRequest());
@@ -23,19 +48,23 @@ export default function Payments({ setIsLoading }) {
   };
 
   const getPlayerPayments = async () => {
-    setPlayerPayments(await getPlayerPaymentsRequest(payer));
+    if (payer !== -1) {
+      setPlayerPayments(await getPlayerPaymentsRequest(players[payer].id));
+    }
 
     setIsLoading(false);
   };
 
   const registerPayment = async () => {
-    if (payer !== "" && selectedSubject >= 0 && payingAmount !== "") {
+    if (payer !== -1 && selectedSubject >= 0 && payingAmount !== "") {
       setIsLoading(true);
+
       await registerPaymentRequest(
-        payer,
+        players[payer].id,
         subjects[selectedSubject].name,
         parseInt(payingAmount),
-        date
+        date,
+        calculateDebt()
       );
 
       getPlayerPayments();
@@ -44,7 +73,9 @@ export default function Payments({ setIsLoading }) {
 
   const removePayment = async (aPaymentId) => {
     setIsLoading(true);
-    setPlayerPayments(await removePaymentRequest(payer, aPaymentId));
+    setPlayerPayments(
+      await removePaymentRequest(players[payer].id, aPaymentId)
+    );
     setIsLoading(false);
   };
 
@@ -56,9 +87,15 @@ export default function Payments({ setIsLoading }) {
   const changeSubject = (aSubjectIndex) => {
     setSelectedSubject(parseInt(aSubjectIndex));
     if (parseInt(aSubjectIndex) !== -1) {
-      setPayingAmount(subjects[aSubjectIndex].amount);
-      const amountInput = document.getElementById("amount");
-      if (amountInput) amountInput.value = subjects[aSubjectIndex].amount;
+      const type = subjects[aSubjectIndex].type;
+      settingAmount[type](type === "cuota" ? payer : aSubjectIndex);
+    }
+  };
+  const changePayer = (aPayerIndex) => {
+    setPayer(aPayerIndex);
+    if (selectedSubject !== -1) {
+      const type = subjects[selectedSubject].type;
+      settingAmount[type](type === "cuota" ? aPayerIndex : selectedSubject);
     }
   };
 
@@ -86,6 +123,44 @@ export default function Payments({ setIsLoading }) {
     );
   };
 
+  const calculateDebt = () => {
+    if (subjects[selectedSubject].type !== "cuota") return 0;
+
+    const payingDate = new Date(date);
+    const dueDate = new Date(subjects[selectedSubject].dueDate);
+
+    const payerData = players[payer];
+    let payingType = payerData.payingType;
+
+    if (payerData.payingType === 0) {
+      const newPayingType = feeValues.indexOf(parseInt(payingAmount));
+
+      payingType = newPayingType;
+      updatePlayerPayingTypeRequest(payerData.id, newPayingType);
+    }
+
+    let mustPay = feeValues[payingType];
+
+    if (payingDate >= dueDate) {
+      mustPay *= 1.05;
+    }
+
+    return mustPay - payingAmount;
+  };
+
+  const payOffDebt = async (aPaymentId, finalPayment) => {
+    setIsLoading(true);
+    setPlayerPayments(
+      await updatePaymentDebtRequest(
+        players[payer].id,
+        aPaymentId,
+        0,
+        finalPayment
+      )
+    );
+    setIsLoading(false);
+  };
+
   useEffect(() => {
     setIsLoading(true);
     getPlayers();
@@ -100,15 +175,15 @@ export default function Payments({ setIsLoading }) {
     <div className="w-full md:w-1/2 px-4 pb-16 max-h-screen mx-auto flex flex-col overflow-y-auto">
       <select
         id="payer"
-        defaultValue=""
+        defaultValue={-1}
         className="select select-bordered w-full mb-4"
-        onChange={(e) => setPayer(e.target.value)}
+        onChange={(e) => changePayer(e.target.value)}
       >
-        <option disabled value="">
+        <option disabled value={-1}>
           Elija un jugador
         </option>
-        {players.map(({ id, name, surname }) => (
-          <option value={id} key={id}>{`${surname}, ${name}`}</option>
+        {players.map(({ id, name, surname }, index) => (
+          <option value={index} key={id}>{`${surname}, ${name}`}</option>
         ))}
       </select>
 
@@ -128,9 +203,9 @@ export default function Payments({ setIsLoading }) {
         }}
       >
         <option value={-1}>Elija un asunto</option>
-        {subjects.map(({ name, amount }, index) => (
+        {subjects.map(({ name }, index) => (
           <option value={index} key={index}>
-            {name} (${amount})
+            {name}
           </option>
         ))}
       </select>
@@ -140,9 +215,7 @@ export default function Payments({ setIsLoading }) {
           id="amount"
           type="number"
           placeholder="Ingrese monto"
-          defaultValue={
-            selectedSubject !== -1 ? subjects[selectedSubject].amount : ""
-          }
+          defaultValue={payingAmount}
           className="input input-min-height input-bordered w-full mb-4"
           onChange={(e) => setPayingAmount(e.target.value)}
         />
@@ -155,6 +228,7 @@ export default function Payments({ setIsLoading }) {
         <PlayerPayments
           playerPayments={playerPayments}
           removePayment={removePayment}
+          payOffDebt={payOffDebt}
         />
       )}
     </div>
