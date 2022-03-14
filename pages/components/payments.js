@@ -116,7 +116,7 @@ export default function Payments({ setIsLoading }) {
         id="date"
         type="date"
         placeholder="Ingrese monto"
-        className="input input-min-height input-bordered w-full mb-4 font-semibold"
+        className="input input-min-height input-bordered w-full mb-4 font-semibold appearance-none text-left"
         onChange={(e) => setCustomDate(e.target.value)}
       />
 
