@@ -107,7 +107,7 @@ export const getPlayerPaymentsRequest = async (aPlayerId) => {
   const response = await client.query({
     query: gql`
       query Query {
-        queryPayment(filter: { payer: { allofterms: "${aPlayerId}" } }, order: {asc: payingDate}) {
+        queryPayment(filter: { payer: { allofterms: "${aPlayerId}" } }, order: {desc: payingDate}) {
           id
           payer
           amount
@@ -146,7 +146,8 @@ export const registerPlayerRequest = async (aPlayerName, aPlayerSurname) => {
 export const registerPaymentRequest = async (
   aPlayerId,
   aSubject,
-  aPayingAmount
+  aPayingAmount,
+  aPayingDate
 ) => {
   await client.mutate({
     mutation: REGISTER_PAYMENT,
@@ -155,18 +156,23 @@ export const registerPaymentRequest = async (
         payer: aPlayerId,
         amount: aPayingAmount,
         subject: aSubject,
-        payingDate: new Date(),
+        payingDate: aPayingDate,
       },
     },
   });
 };
-export const registerSubjectRequest = async (aSubjectName, aSubjectAmount) => {
+export const registerSubjectRequest = async (
+  aSubjectName,
+  aSubjectAmount,
+  aSubjectType
+) => {
   await client.mutate({
     mutation: REGISTER_SUBJECT,
     variables: {
       input: {
         name: aSubjectName,
         amount: aSubjectAmount,
+        type: aSubjectType,
       },
     },
   });

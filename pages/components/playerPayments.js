@@ -1,12 +1,20 @@
 export default function PlayerPayments({ playerPayments, removePayment }) {
+  const convertDateToText = (aDate) => {
+    const date = new Date(aDate);
+
+    return (
+      date.getDate() + "/" + (date.getMonth() + 1) + "/" + date.getFullYear()
+    );
+  };
   return (
-    <div className="">
+    <div className="overflow-x-auto w-max-screem">
       <hr />
       <h2 className="text-xl font-bold text-center my-4">Pagos realizados</h2>
       <table className="table w-full">
         <thead>
           <tr>
             <th></th>
+            <th>Fecha</th>
             <th>Asunto</th>
             <th>Monto ($)</th>
             {removePayment && <th></th>}
@@ -14,9 +22,10 @@ export default function PlayerPayments({ playerPayments, removePayment }) {
         </thead>
         <tbody>
           {playerPayments &&
-            playerPayments.map(({ subject, amount, id }, index) => (
+            playerPayments.map(({ subject, amount, id, payingDate }, index) => (
               <tr key={index} className="hover">
                 <th>{index + 1}</th>
+                <td>{convertDateToText(payingDate)}</td>
                 <td>{subject}</td>
                 <td>${amount}</td>
                 {removePayment && (

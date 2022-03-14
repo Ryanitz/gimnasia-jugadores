@@ -9,6 +9,7 @@ export default function Subjects({ setIsLoading }) {
   const [subjects, setSubjects] = useState([]);
   const [subjectName, setSubjectName] = useState("");
   const [subjectAmount, setSubjectAmount] = useState("");
+  const [isFee, setIsFee] = useState(false);
 
   const getSubjects = async () => {
     setSubjects(await getSubjectsRequest());
@@ -19,7 +20,11 @@ export default function Subjects({ setIsLoading }) {
     if (subjectName !== "" && subjectAmount !== "") {
       setIsLoading(true);
       setSubjects(
-        await registerSubjectRequest(subjectName, parseInt(subjectAmount))
+        await registerSubjectRequest(
+          subjectName,
+          parseInt(subjectAmount),
+          isFee ? "couta" : "normal"
+        )
       );
       setIsLoading(false);
       resetValues();
@@ -62,6 +67,14 @@ export default function Subjects({ setIsLoading }) {
         onChange={(e) => setSubjectAmount(e.target.value)}
         className="input input-bordered w-full mb-4"
       />
+      <label className="label cursor-pointer flex justify-start mb-4">
+        <input
+          type="checkbox"
+          onClick={(e) => setIsFee(e.target.checked)}
+          className="checkbox"
+        />
+        <span className="ml-4">El asunto es cuota</span>
+      </label>
       <button className="btn mb-4" onClick={registerSubject}>
         Agregar asunto
       </button>

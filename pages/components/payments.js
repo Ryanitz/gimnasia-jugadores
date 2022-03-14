@@ -15,6 +15,7 @@ export default function Payments({ setIsLoading }) {
   const [selectedSubject, setSelectedSubject] = useState(-1);
   const [payingAmount, setPayingAmount] = useState(0);
   const [playerPayments, setPlayerPayments] = useState([]);
+  const [date, setDate] = useState("");
 
   const getPlayers = async () => {
     setPlayers(await getPlayersRequest());
@@ -33,7 +34,8 @@ export default function Payments({ setIsLoading }) {
       await registerPaymentRequest(
         payer,
         subjects[selectedSubject].name,
-        parseInt(payingAmount)
+        parseInt(payingAmount),
+        date
       );
 
       getPlayerPayments();
@@ -52,15 +54,42 @@ export default function Payments({ setIsLoading }) {
   };
 
   const changeSubject = (aSubjectIndex) => {
-    setSelectedSubject(aSubjectIndex);
-    setPayingAmount(subjects[aSubjectIndex].amount);
-    const amountInput = document.getElementById("amount");
-    if (amountInput) amountInput.value = subjects[aSubjectIndex].amount;
+    setSelectedSubject(parseInt(aSubjectIndex));
+    if (parseInt(aSubjectIndex) !== -1) {
+      setPayingAmount(subjects[aSubjectIndex].amount);
+      const amountInput = document.getElementById("amount");
+      if (amountInput) amountInput.value = subjects[aSubjectIndex].amount;
+    }
+  };
+
+  const setTodayDate = () => {
+    const date = new Date();
+    const dateInput = document.getElementById("date");
+    const day = date.getDate() < 10 ? "0" + date.getDate() : date.getDate();
+    const month =
+      date.getMonth() + 1 < 10
+        ? "0" + (date.getMonth() + 1)
+        : date.getMonth() + 1;
+
+    dateInput.value = `${date.getFullYear()}-${month}-${day}`;
+    setDate(date);
+  };
+
+  const setCustomDate = (aDate) => {
+    const dateSplit = aDate.split("-");
+    setDate(
+      new Date(
+        parseInt(dateSplit[0]),
+        parseInt(dateSplit[1]) - 1,
+        parseInt(dateSplit[2])
+      )
+    );
   };
 
   useEffect(() => {
     setIsLoading(true);
     getPlayers();
+    setTodayDate();
   }, []);
 
   useEffect(() => {
@@ -83,17 +112,22 @@ export default function Payments({ setIsLoading }) {
         ))}
       </select>
 
+      <input
+        id="date"
+        type="date"
+        placeholder="Ingrese monto"
+        className="input input-min-height input-bordered w-full mb-4 font-semibold"
+        onChange={(e) => setCustomDate(e.target.value)}
+      />
+
       <select
         id="subject"
-        defaultValue=""
         className="select select-bordered w-full mb-4"
         onChange={(e) => {
           changeSubject(e.target.value);
         }}
       >
-        <option disabled value="">
-          Elija un asunto
-        </option>
+        <option value={-1}>Elija un asunto</option>
         {subjects.map(({ name, amount }, index) => (
           <option value={index} key={index}>
             {name} (${amount})
@@ -106,7 +140,9 @@ export default function Payments({ setIsLoading }) {
           id="amount"
           type="number"
           placeholder="Ingrese monto"
-          defaultValue={subjects[selectedSubject].amount}
+          defaultValue={
+            selectedSubject !== -1 ? subjects[selectedSubject].amount : ""
+          }
           className="input input-min-height input-bordered w-full mb-4"
           onChange={(e) => setPayingAmount(e.target.value)}
         />
