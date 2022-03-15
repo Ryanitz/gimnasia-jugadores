@@ -6,6 +6,7 @@ import Loading from "./components/loading";
 import Payments from "./components/payments";
 import Players from "./components/players";
 import Subjects from "./components/subjects";
+import Expenses from "./components/expenses";
 
 export default function Home() {
   const [isLoading, setIsLoading] = useState(true);
@@ -54,6 +55,12 @@ export default function Home() {
       icon: "M9 13h6m-3-3v6m-9 1V7a2 2 0 012-2h6l2 2h6a2 2 0 012 2v8a2 2 0 01-2 2H5a2 2 0 01-2-2z",
       iconActive:
         "M4 4a2 2 0 00-2 2v8a2 2 0 002 2h12a2 2 0 002-2V8a2 2 0 00-2-2h-5L9 4H4zm7 5a1 1 0 10-2 0v1H8a1 1 0 100 2h1v1a1 1 0 102 0v-1h1a1 1 0 100-2h-1V9z",
+    },
+    Gastos: {
+      component: <Expenses setIsLoading={setIsLoading} />,
+      icon: "M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4",
+      iconActive:
+        "M5 3a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2V5a2 2 0 00-2-2H5zm0 2h10v7h-2l-1 2H8l-1-2H5V5z",
     },
   };
 
