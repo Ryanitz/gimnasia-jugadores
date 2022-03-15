@@ -36,7 +36,11 @@ export default function PlayerPayments({
                   <td>{subject}</td>
                   <td>${amount}</td>
                   <td>
-                    ${debt}
+                    <span
+                      className={debt > 0 ? "text-red-500 font-semibold" : ""}
+                    >
+                      ${debt}
+                    </span>
                     {debt !== 0 && isAdmin && (
                       <button
                         className="ml-4 btn btn-sm"

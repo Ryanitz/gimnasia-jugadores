@@ -8,7 +8,7 @@ import {
 } from "./api/requests";
 import PlayerPayments from "./components/playerPayments";
 
-export default function Payments() {
+export default function PlayersList() {
   const [isLoading, setIsLoading] = useState(false);
   const [players, setPlayers] = useState([]);
   const [payer, setPayer] = useState("");

@@ -143,6 +143,37 @@ export const getPlayerPaymentsRequest = async (aPlayerId) => {
 
   return payments;
 };
+export const getAllPaymentsRequest = async () => {
+  const response = await client.query({
+    query: gql`
+      query Query {
+        queryPayment(order: { desc: payingDate }) {
+          id
+          payer
+          amount
+          subject
+          payingDate
+          debt
+        }
+      }
+    `,
+  });
+
+  const payments = response.data.queryPayment.map(
+    ({ id, payer, amount, subject, payingDate, debt }) => {
+      return {
+        id,
+        payer,
+        amount,
+        subject,
+        payingDate,
+        debt,
+      };
+    }
+  );
+
+  return payments;
+};
 
 export const registerPlayerRequest = async (aPlayerName, aPlayerSurname) => {
   await client.mutate({
