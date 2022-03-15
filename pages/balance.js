@@ -36,11 +36,6 @@ export default function Balance() {
         <p>Balance total: {income - outcome}</p>
         <hr className="mt-4" />
         <h2 className="my-4 text-xl font-bold text-center">Lista de gastos</h2>
-        {payments.map(({ id, payer, amount, subject, payingDate, debt }) => (
-          <p>
-            El jugador {payer} pago ${amount} el dia {payingDate} {subject}
-          </p>
-        ))}
       </div>
     </div>
   );
