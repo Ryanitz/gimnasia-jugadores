@@ -8,6 +8,8 @@ export default function Balance() {
   const [income, setIncome] = useState(0);
   const [coutasIncome, setCoutasIncome] = useState(0);
   const [dinnersIncome, setDinnersIncome] = useState(0);
+  const [coutasOutcome, setCoutasOutcome] = useState(0);
+  const [dinnersOutcome, setDinnersOutcome] = useState(0);
   const [outcome, setOutcome] = useState(0);
   const [payments, setPayments] = useState([]);
   const [expensesList, setExpenseList] = useState([]);
@@ -45,10 +47,18 @@ export default function Balance() {
 
   useEffect(() => {
     let calculateOutcome = 0;
-    expensesList.forEach(({ totalPrice }) => {
+    let calculateCoutasOutcome = 0;
+    let calculateDinnersOutcome = 0;
+    expensesList.forEach(({ type, totalPrice }) => {
+      if (type.toLowerCase().includes("cuota"))
+        calculateCoutasOutcome += totalPrice;
+      else calculateDinnersOutcome += totalPrice;
+
       calculateOutcome += totalPrice;
     });
 
+    setCoutasOutcome(calculateCoutasOutcome);
+    setDinnersOutcome(calculateDinnersOutcome);
     setOutcome(calculateOutcome);
   }, [expensesList]);
 
@@ -57,11 +67,36 @@ export default function Balance() {
       {isLoading && <Loading />}
       <div className="w-full md:w-1/2 px-4 pb-16 max-h-screen mx-auto flex flex-col overflow-y-auto">
         <h2 className="my-4 text-2xl font-bold text-center">Balance</h2>
-        <p>Ingresos por 3T: {coutasIncome}</p>
-        <p>Ingresos por cenas: {dinnersIncome}</p>
-        <p>Dinero total: {income}</p>
-        <p>Dinero gastado: {outcome}</p>
-        <p>Balance total: {income - outcome}</p>
+        <table className="table table-compact w-full">
+          <thead>
+            <tr>
+              <th>Nombre</th>
+              <th>Ingreso</th>
+              <th>Egreso</th>
+              <th>Balance</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr className="hover">
+              <td>3T</td>
+              <td>{coutasIncome}</td>
+              <td>{coutasOutcome}</td>
+              <td>{coutasIncome - coutasOutcome}</td>
+            </tr>
+            <tr className="hover">
+              <td>Cenas</td>
+              <td>{dinnersIncome}</td>
+              <td>{dinnersOutcome}</td>
+              <td>{dinnersIncome - dinnersOutcome}</td>
+            </tr>
+            <tr className="hover">
+              <td>Total</td>
+              <td>{income}</td>
+              <td>{outcome}</td>
+              <td>{income - outcome}</td>
+            </tr>
+          </tbody>
+        </table>
         <hr className="my-4" />
         <ExpensesList expensesList={expensesList} />
       </div>

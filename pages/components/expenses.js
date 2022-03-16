@@ -10,6 +10,7 @@ import ExpensesList from "./expensesList";
 export default function Expenses({ setIsLoading }) {
   const [expensesList, setExpenseList] = useState([]);
   const [expenseName, setExpenseName] = useState("");
+  const [expenseType, setExpenseType] = useState("");
   const [expenseItems, setExpenseItems] = useState([]);
   const [finalPrice, setFinalPrice] = useState(0);
   const [players, setPlayers] = useState([]);
@@ -23,17 +24,24 @@ export default function Expenses({ setIsLoading }) {
   };
 
   const registerExpense = async () => {
-    setIsLoading(true);
-    setExpenseList(
-      await registerExpenseRequest(expenseName, finalPrice, expenseItems)
-    );
+    if ((expenseName !== "", expenseItems.length > 0 && expenseType !== "")) {
+      setIsLoading(true);
+      setExpenseList(
+        await registerExpenseRequest(
+          expenseName,
+          finalPrice,
+          expenseItems,
+          expenseType
+        )
+      );
 
-    setExpenseName("");
-    const expenseNameInput = document.getElementById("name");
-    expenseNameInput.value = "";
-    setExpenseItems([]);
+      setExpenseName("");
+      const expenseNameInput = document.getElementById("name");
+      expenseNameInput.value = "";
+      setExpenseItems([]);
 
-    setIsLoading(false);
+      setIsLoading(false);
+    }
   };
 
   useEffect(() => {
@@ -56,6 +64,18 @@ export default function Expenses({ setIsLoading }) {
         onChange={(e) => setExpenseName(e.target.value)}
         className="input input-bordered w-full mb-4"
       />
+      <select
+        id="type"
+        defaultValue=""
+        className="select select-bordered w-full mb-4"
+        onChange={(e) => setExpenseType(e.target.value)}
+      >
+        <option disabled value="">
+          Tipo de gasto
+        </option>
+        <option value="Couta">3T</option>
+        <option value="Cena">Cena</option>
+      </select>
       <ExpenseItems
         players={players}
         expenseItems={expenseItems}

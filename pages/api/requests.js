@@ -34,6 +34,7 @@ const GET_EXPENSES = gql`
         price
         quantity
       }
+      type
     }
   }
 `;
@@ -203,12 +204,13 @@ export const getExpensesListRequest = async () => {
     query: GET_EXPENSES,
   });
   const expenses = response.data.queryExpense.map(
-    ({ id, name, totalPrice, items }) => {
+    ({ id, name, totalPrice, items, type }) => {
       return {
         id,
         name,
         totalPrice,
         items,
+        type,
       };
     }
   );
@@ -272,7 +274,8 @@ export const registerSubjectRequest = async (
 export const registerExpenseRequest = async (
   anExpenseName,
   anExpenseTotalPrice,
-  anExpenseItemsList
+  anExpenseItemsList,
+  anExpenseType
 ) => {
   await client.mutate({
     mutation: REGISTER_EXPENSE,
@@ -281,6 +284,7 @@ export const registerExpenseRequest = async (
         name: anExpenseName,
         totalPrice: anExpenseTotalPrice,
         items: anExpenseItemsList,
+        type: anExpenseType,
         date: new Date(),
       },
     },

@@ -19,7 +19,7 @@ export default function ExpenseItems({
     ) {
       const newExpenseItem = {
         name: itemNameInput.value,
-        price: parseInt(itemPriceInput.value),
+        price: parseFloat(itemPriceInput.value),
         quantity: parseInt(itemAmountInput.value),
         buyerName: `${players[buyerIndex].surname}, ${players[buyerIndex].name}`,
         buyerId: players[buyerIndex].id,

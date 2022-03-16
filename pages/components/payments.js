@@ -62,7 +62,7 @@ export default function Payments({ setIsLoading }) {
       await registerPaymentRequest(
         players[payer].id,
         subjects[selectedSubject].name,
-        parseInt(payingAmount),
+        parseFloat(payingAmount),
         date,
         calculateDebt()
       );
@@ -134,7 +134,7 @@ export default function Payments({ setIsLoading }) {
     let payingType = payerData.payingType;
 
     if (payerData.payingType === 0) {
-      const newPayingType = feeValues.indexOf(parseInt(payingAmount));
+      const newPayingType = feeValues.indexOf(parseFloat(payingAmount));
 
       payingType = newPayingType;
       updatePlayerPayingTypeRequest(payerData.id, newPayingType);

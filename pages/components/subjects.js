@@ -27,7 +27,7 @@ export default function Subjects({ setIsLoading }) {
         await registerSubjectRequest(
           subjectName,
           isFee ? "cuota" : "normal",
-          parseInt(subjectAmount),
+          parseFloat(subjectAmount),
           date
         )
       );
