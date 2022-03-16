@@ -3,12 +3,13 @@ import {
   getExpensesListRequest,
   getPlayersRequest,
   registerExpenseRequest,
+  removeExpenseRequest,
 } from "../api/requests";
 import ExpenseItems from "./expenseItems";
 import ExpensesList from "./expensesList";
 
 export default function Expenses({ setIsLoading }) {
-  const [expensesList, setExpenseList] = useState([]);
+  const [expensesList, setExpensesList] = useState([]);
   const [expenseName, setExpenseName] = useState("");
   const [expenseType, setExpenseType] = useState("");
   const [expenseItems, setExpenseItems] = useState([]);
@@ -16,7 +17,7 @@ export default function Expenses({ setIsLoading }) {
   const [players, setPlayers] = useState([]);
 
   const getExpensesList = async () => {
-    setExpenseList(await getExpensesListRequest());
+    setExpensesList(await getExpensesListRequest());
   };
 
   const getPlayers = async () => {
@@ -26,7 +27,7 @@ export default function Expenses({ setIsLoading }) {
   const registerExpense = async () => {
     if ((expenseName !== "", expenseItems.length > 0 && expenseType !== "")) {
       setIsLoading(true);
-      setExpenseList(
+      setExpensesList(
         await registerExpenseRequest(
           expenseName,
           finalPrice,
@@ -42,6 +43,12 @@ export default function Expenses({ setIsLoading }) {
 
       setIsLoading(false);
     }
+  };
+
+  const removeExpense = async (anExpenseId) => {
+    setIsLoading(true);
+    setExpensesList(await removeExpenseRequest(anExpenseId));
+    setIsLoading(false);
   };
 
   useEffect(() => {
@@ -86,7 +93,7 @@ export default function Expenses({ setIsLoading }) {
         Registrar gasto
       </button>
       <hr className="mb-4" />
-      <ExpensesList expensesList={expensesList} />
+      <ExpensesList expensesList={expensesList} removeExpense={removeExpense} />
     </div>
   );
 }

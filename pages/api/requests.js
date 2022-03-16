@@ -102,6 +102,13 @@ const REMOVE_SUBJECT = gql`
     }
   }
 `;
+const REMOVE_EXPENSE = gql`
+  mutation Mutation($filter: ExpenseFilter!) {
+    deleteExpense(filter: $filter) {
+      msg
+    }
+  }
+`;
 
 export const getPlayersRequest = async () => {
   const response = await client.query({
@@ -328,6 +335,18 @@ export const removeSubjectRequest = async (aSubjectId) => {
   });
 
   return await getSubjectsRequest();
+};
+export const removeExpenseRequest = async (anExpenseId) => {
+  await client.mutate({
+    mutation: REMOVE_EXPENSE,
+    variables: {
+      filter: {
+        id: anExpenseId,
+      },
+    },
+  });
+
+  return getExpensesListRequest();
 };
 
 export const updatePlayerPayingTypeRequest = async (aPlayerId, aPayingType) => {

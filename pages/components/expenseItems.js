@@ -34,11 +34,22 @@ export default function ExpenseItems({
     }
   };
 
+  const removeItem = (anItemIndex) => {
+    const newExpenseItems = expenseItems.filter(
+      (item, index) => anItemIndex !== index
+    );
+
+    setExpenseItems(newExpenseItems);
+  };
+
   return (
     <div className="border rounded-lg flex flex-col p-4 mb-4">
       <h3 className="font-semibold text-xl mb-4">Items de la compra</h3>
       {expenseItems && expenseItems.length > 0 && (
-        <ExpenseItemsTable expenseItems={expenseItems} />
+        <ExpenseItemsTable
+          expenseItems={expenseItems}
+          removeItem={removeItem}
+        />
       )}
       {expenseItems && expenseItems.length > 0 && <hr className="mb-4" />}
       {expenseItems && expenseItems.length > 0 && (
