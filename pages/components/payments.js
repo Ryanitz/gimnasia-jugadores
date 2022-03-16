@@ -9,6 +9,7 @@ import {
   updatePlayerPayingTypeRequest,
 } from "../api/requests";
 import PlayerPayments from "./playerPayments";
+import SubjectsTable from "./subjectsTable";
 
 export default function Payments({ setIsLoading }) {
   const [players, setPlayers] = useState([]);
@@ -17,6 +18,7 @@ export default function Payments({ setIsLoading }) {
   const [selectedSubject, setSelectedSubject] = useState(-1);
   const [payingAmount, setPayingAmount] = useState(0);
   const [playerPayments, setPlayerPayments] = useState([]);
+  const [playerSubjectsNotPaid, setPlayerSubjectsNotPaid] = useState([]);
   const [date, setDate] = useState("");
 
   const setPayingAmountCuota = (aPayerIndex) => {
@@ -162,6 +164,14 @@ export default function Payments({ setIsLoading }) {
     setIsLoading(false);
   };
 
+  const hasPaidSubject = (aSubjectName) => {
+    return (
+      playerPayments.filter((payment) => {
+        return payment.subject === aSubjectName;
+      }).length > 0
+    );
+  };
+
   useEffect(() => {
     setIsLoading(true);
     getPlayers();
@@ -169,8 +179,18 @@ export default function Payments({ setIsLoading }) {
   }, []);
 
   useEffect(() => {
-    if (payer !== "") getPlayerPayments();
+    if (payer !== -1) getPlayerPayments();
   }, [payer]);
+
+  useEffect(() => {
+    if (payer !== -1) {
+      setPlayerSubjectsNotPaid(
+        subjects.filter((subject) => {
+          return !hasPaidSubject(subject.name) && subject.name !== "Excedente";
+        })
+      );
+    }
+  }, [playerPayments]);
 
   return (
     <div className="w-full md:w-1/2 px-4 pb-16 max-h-screen mx-auto flex flex-col overflow-y-auto">
@@ -232,6 +252,16 @@ export default function Payments({ setIsLoading }) {
           payOffDebt={payOffDebt}
           isAdmin={true}
         />
+      )}
+
+      {playerSubjectsNotPaid.length > 0 && (
+        <div className="overflow-x-auto w-max-screem">
+          <hr />
+          <h2 className="text-xl font-bold text-center my-4">
+            Asuntos no pagados
+          </h2>
+          <SubjectsTable subjects={playerSubjectsNotPaid} />
+        </div>
       )}
     </div>
   );
