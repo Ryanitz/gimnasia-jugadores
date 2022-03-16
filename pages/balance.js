@@ -11,8 +11,32 @@ export default function Balance() {
   const [coutasOutcome, setCoutasOutcome] = useState(0);
   const [dinnersOutcome, setDinnersOutcome] = useState(0);
   const [outcome, setOutcome] = useState(0);
-  const [payments, setPayments] = useState([]);
+
+  const [monthlyIncome, setMonthlyIncome] = useState(0);
+  const [monthlyOutcome, setMonthlyOutcome] = useState(0);
+  const [monthlyCoutasIncome, setMonthlyCoutasIncome] = useState(0);
+  const [monthlyDinnersIncome, setMonthlyDinnersIncome] = useState(0);
+  const [monthlyCoutasOutcome, setMonthlyCoutasOutcome] = useState(0);
+  const [monthlyDinnersOutcome, setMonthlyDinnersOutcome] = useState(0);
+
+  const [paymentsList, setPaymentsList] = useState([]);
   const [expensesList, setExpenseList] = useState([]);
+  const [selectedMonth, setSelectedMonth] = useState(-1);
+  const today = new Date();
+  const months = [
+    "Enero",
+    "Febrero",
+    "Marzo",
+    "Abril",
+    "Mayo",
+    "Junio",
+    "Julio",
+    "Agosto",
+    "Septiembre",
+    "Octubre",
+    "Noviembre",
+    "Diciembre",
+  ];
 
   const getExpensesList = async () => {
     setExpenseList(await getExpensesListRequest());
@@ -21,7 +45,7 @@ export default function Balance() {
 
   const calculateBalance = async () => {
     const paymentsList = await getAllPaymentsRequest();
-    setPayments(paymentsList);
+    setPaymentsList(paymentsList);
 
     let finalIncome = 0;
     let calculateCoutasIncome = 0;
@@ -38,6 +62,37 @@ export default function Balance() {
     setIncome(finalIncome);
 
     getExpensesList();
+  };
+
+  const calculateOutcomeFromMonth = (anExpensesList) => {
+    let finalOutcome = 0;
+    let calculateMonthlyCoutasOutcome = 0;
+    let calculateMonthlyDinnersOutcome = 0;
+    anExpensesList.forEach(({ totalPrice, type }) => {
+      if (type.toLowerCase().includes("cuota"))
+        calculateMonthlyCoutasOutcome += totalPrice;
+      else calculateMonthlyDinnersOutcome += totalPrice;
+
+      finalOutcome += totalPrice;
+    });
+    setMonthlyCoutasOutcome(calculateMonthlyCoutasOutcome);
+    setMonthlyDinnersOutcome(calculateMonthlyDinnersOutcome);
+    setMonthlyOutcome(finalOutcome);
+  };
+  const calculateIncomeFromMonth = (aPaymentsList) => {
+    let finalIncome = 0;
+    let calculateMonthlyCoutasIncome = 0;
+    let calculateMonthlyDinnersIncome = 0;
+    aPaymentsList.forEach(({ amount, subject }) => {
+      if (subject.toLowerCase().includes("cuota"))
+        calculateMonthlyCoutasIncome += amount;
+      else calculateMonthlyDinnersIncome += amount;
+
+      finalIncome += amount;
+    });
+    setMonthlyCoutasIncome(calculateMonthlyCoutasIncome);
+    setMonthlyDinnersIncome(calculateMonthlyDinnersIncome);
+    setMonthlyIncome(finalIncome);
   };
 
   useEffect(() => {
@@ -61,6 +116,20 @@ export default function Balance() {
     setDinnersOutcome(calculateDinnersOutcome);
     setOutcome(calculateOutcome);
   }, [expensesList]);
+
+  useEffect(() => {
+    const filteredExpensesList = expensesList.filter((expense) => {
+      const expenseDate = new Date(expense.date);
+      return expenseDate.getMonth() === selectedMonth;
+    });
+    const filteredPaymentsList = paymentsList.filter((payment) => {
+      const paymentDate = new Date(payment.payingDate);
+      return paymentDate.getMonth() === selectedMonth;
+    });
+
+    calculateOutcomeFromMonth(filteredExpensesList);
+    calculateIncomeFromMonth(filteredPaymentsList);
+  }, [selectedMonth]);
 
   return (
     <div>
@@ -97,6 +166,61 @@ export default function Balance() {
             </tr>
           </tbody>
         </table>
+        <hr className="my-4" />
+        <div className="flex w-full justify-center items-center">
+          <h2 className="text-2xl font-bold text-center">Balance de</h2>
+          <select
+            id="player"
+            defaultValue={-1}
+            className="select select-sm select-bordered ml-2"
+            onChange={(e) => setSelectedMonth(parseInt(e.target.value))}
+          >
+            <option disabled value={-1}>
+              Elija un mes
+            </option>
+            {months.map((month, index) => (
+              <option
+                key={index}
+                value={index}
+                disabled={today.getMonth() < index}
+              >
+                {month}
+              </option>
+            ))}
+          </select>
+        </div>
+        {selectedMonth !== -1 && (
+          <table className="mt-4 table table-compact w-full text-center">
+            <thead>
+              <tr>
+                <th>Nombre</th>
+                <th>Ingreso</th>
+                <th>Egreso</th>
+                <th>Balance</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr className="hover">
+                <td>3T</td>
+                <td>{monthlyCoutasIncome}</td>
+                <td>{monthlyCoutasOutcome}</td>
+                <td>{monthlyCoutasIncome - monthlyCoutasOutcome}</td>
+              </tr>
+              <tr className="hover">
+                <td>Cenas</td>
+                <td>{monthlyDinnersIncome}</td>
+                <td>{monthlyDinnersOutcome}</td>
+                <td>{monthlyDinnersIncome - monthlyDinnersOutcome}</td>
+              </tr>
+              <tr className="hover">
+                <td>Total</td>
+                <td>{monthlyIncome}</td>
+                <td>{monthlyOutcome}</td>
+                <td>{monthlyIncome - monthlyOutcome}</td>
+              </tr>
+            </tbody>
+          </table>
+        )}
         <hr className="my-4" />
         <ExpensesList expensesList={expensesList} />
       </div>

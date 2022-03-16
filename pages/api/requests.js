@@ -34,6 +34,7 @@ const GET_EXPENSES = gql`
         price
         quantity
       }
+      date
       type
     }
   }
@@ -211,13 +212,14 @@ export const getExpensesListRequest = async () => {
     query: GET_EXPENSES,
   });
   const expenses = response.data.queryExpense.map(
-    ({ id, name, totalPrice, items, type }) => {
+    ({ id, name, totalPrice, items, type, date }) => {
       return {
         id,
         name,
         totalPrice,
         items,
         type,
+        date,
       };
     }
   );
