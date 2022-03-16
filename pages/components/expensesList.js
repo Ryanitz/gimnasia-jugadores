@@ -9,7 +9,7 @@ export default function ExpensesList({ expensesList }) {
       <h2 className="text-2xl font-bold text-center mb-4">Lista de gastos</h2>
       {expensesList &&
         expensesList.map(({ name, totalPrice, items }, index) => (
-          <div key={index} className="border rounded-lg p-2">
+          <div key={index} className="border rounded-lg p-2 mb-4">
             <div className="flex items-center mb-2">
               <span className="mr-2 text-sm font-semibold">{index + 1}</span>
               <p className="w-full">
