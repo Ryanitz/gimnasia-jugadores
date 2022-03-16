@@ -6,6 +6,9 @@ export default function Home() {
       <Link href="/jugadores">
         <a className="btn mb-4 w-full md:w-1/2">Jugadores</a>
       </Link>
+      <Link href="/deudas">
+        <a className="btn mb-4 w-full md:w-1/2">Deudas</a>
+      </Link>
       <Link href="/balance">
         <a className="btn w-full mb-4 md:w-1/2">Balance</a>
       </Link>

@@ -1,9 +1,5 @@
 import React, { useState, useEffect } from "react";
-import {
-  getPlayerPaymentsRequest,
-  getPlayersRequest,
-  getSubjectsRequest,
-} from "./api/requests";
+import { getPlayerPaymentsRequest, getPlayersRequest } from "./api/requests";
 import PlayerPayments from "./components/playerPayments";
 
 export default function PlayersList() {
@@ -14,17 +10,12 @@ export default function PlayersList() {
 
   const getPlayers = async () => {
     setPlayers(await getPlayersRequest());
-    getSubjects();
+    setIsLoading(false);
   };
 
   const getPlayerPayments = async () => {
     setPlayerPayments(await getPlayerPaymentsRequest(payer));
 
-    setIsLoading(false);
-  };
-
-  const getSubjects = async () => {
-    setSubjects(await getSubjectsRequest());
     setIsLoading(false);
   };
 

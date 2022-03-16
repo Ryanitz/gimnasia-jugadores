@@ -12,10 +12,10 @@ export default function ExpensesList({ expensesList, removeExpense }) {
           <div key={index} className="border rounded-lg p-2 mb-4">
             <div className="flex items-center mb-2">
               <span className="mr-2 text-sm font-semibold">{index + 1}</span>
-              <p className="w-full">
+              <p className="w-full text-center">
                 <span className="font-semibold truncate">Nombre:</span> {name}
               </p>
-              <p className="w-full">
+              <p className="w-full text-center">
                 <span className="font-semibold truncate">Precio final:</span> $
                 {totalPrice}
               </p>

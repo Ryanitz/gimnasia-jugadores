@@ -67,7 +67,7 @@ export default function Balance() {
       {isLoading && <Loading />}
       <div className="w-full md:w-1/2 px-4 pb-16 max-h-screen mx-auto flex flex-col overflow-y-auto">
         <h2 className="my-4 text-2xl font-bold text-center">Balance</h2>
-        <table className="table table-compact w-full">
+        <table className="table table-compact w-full text-center">
           <thead>
             <tr>
               <th>Nombre</th>
