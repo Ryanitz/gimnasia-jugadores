@@ -22,6 +22,21 @@ const GET_SUBJECTS = gql`
     }
   }
 `;
+const GET_EXPENSES = gql`
+  query Query {
+    queryExpense(order: { desc: date }) {
+      id
+      name
+      totalPrice
+      items {
+        buyerName
+        name
+        price
+        quantity
+      }
+    }
+  }
+`;
 const ADD_PLAYER = gql`
   mutation Mutation($input: [AddPlayerInput!]!) {
     addPlayer(input: $input) {
@@ -52,6 +67,15 @@ const REGISTER_SUBJECT = gql`
         id
         name
         amount
+      }
+    }
+  }
+`;
+const REGISTER_EXPENSE = gql`
+  mutation Mutation($input: [AddExpenseInput!]!) {
+    addExpense(input: $input) {
+      expense {
+        id
       }
     }
   }
@@ -174,6 +198,23 @@ export const getAllPaymentsRequest = async () => {
 
   return payments;
 };
+export const getExpensesListRequest = async () => {
+  const response = await client.query({
+    query: GET_EXPENSES,
+  });
+  const expenses = response.data.queryExpense.map(
+    ({ id, name, totalPrice, items }) => {
+      return {
+        id,
+        name,
+        totalPrice,
+        items,
+      };
+    }
+  );
+
+  return expenses;
+};
 
 export const registerPlayerRequest = async (aPlayerName, aPlayerSurname) => {
   await client.mutate({
@@ -227,6 +268,25 @@ export const registerSubjectRequest = async (
   });
 
   return await getSubjectsRequest();
+};
+export const registerExpenseRequest = async (
+  anExpenseName,
+  anExpenseTotalPrice,
+  anExpenseItemsList
+) => {
+  await client.mutate({
+    mutation: REGISTER_EXPENSE,
+    variables: {
+      input: {
+        name: anExpenseName,
+        totalPrice: anExpenseTotalPrice,
+        items: anExpenseItemsList,
+        date: new Date(),
+      },
+    },
+  });
+
+  return getExpensesListRequest();
 };
 
 export const removePlayerRequest = async (aPlayerId) => {

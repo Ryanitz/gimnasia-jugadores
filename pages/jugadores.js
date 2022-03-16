@@ -3,8 +3,6 @@ import {
   getPlayerPaymentsRequest,
   getPlayersRequest,
   getSubjectsRequest,
-  registerPaymentRequest,
-  removePaymentRequest,
 } from "./api/requests";
 import PlayerPayments from "./components/playerPayments";
 
@@ -12,9 +10,6 @@ export default function PlayersList() {
   const [isLoading, setIsLoading] = useState(false);
   const [players, setPlayers] = useState([]);
   const [payer, setPayer] = useState("");
-  const [subjects, setSubjects] = useState([]);
-  const [selectedSubject, setSelectedSubject] = useState(-1);
-  const [payingAmount, setPayingAmount] = useState(0);
   const [playerPayments, setPlayerPayments] = useState([]);
 
   const getPlayers = async () => {
@@ -28,35 +23,9 @@ export default function PlayersList() {
     setIsLoading(false);
   };
 
-  const registerPayment = async () => {
-    if (payer !== "" && selectedSubject >= 0 && payingAmount !== "") {
-      setIsLoading(true);
-      await registerPaymentRequest(
-        payer,
-        subjects[selectedSubject].name,
-        parseInt(payingAmount)
-      );
-
-      getPlayerPayments();
-    }
-  };
-
-  const removePayment = async (aPaymentId) => {
-    setIsLoading(true);
-    setPlayerPayments(await removePaymentRequest(payer, aPaymentId));
-    setIsLoading(false);
-  };
-
   const getSubjects = async () => {
     setSubjects(await getSubjectsRequest());
     setIsLoading(false);
-  };
-
-  const changeSubject = (aSubjectIndex) => {
-    setSelectedSubject(aSubjectIndex);
-    setPayingAmount(subjects[aSubjectIndex].amount);
-    const amountInput = document.getElementById("amount");
-    if (amountInput) amountInput.value = subjects[aSubjectIndex].amount;
   };
 
   useEffect(() => {
