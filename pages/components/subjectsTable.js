@@ -9,7 +9,7 @@ export default function SubjectsTable({ subjects, removeSubject }) {
 
   return (
     <div className="overflow-x-auto">
-      <table className="table w-full">
+      <table className="table w-full text-center">
         <thead>
           <tr>
             <th></th>
