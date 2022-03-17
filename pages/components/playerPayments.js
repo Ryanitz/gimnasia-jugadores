@@ -34,12 +34,12 @@ export default function PlayerPayments({
                   <th>{index + 1}</th>
                   <td>{convertDateToText(payingDate)}</td>
                   <td>{subject}</td>
-                  <td>${amount}</td>
+                  <td>{amount === 0 ? "No asistió" : `$${amount}`}</td>
                   <td>
                     <span
                       className={debt > 0 ? "text-red-500 font-semibold" : ""}
                     >
-                      ${debt}
+                      {debt === 0 ? "---" : `$${debt}`}
                     </span>
                     {debt !== 0 && isAdmin && (
                       <button
