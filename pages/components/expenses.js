@@ -63,36 +63,38 @@ export default function Expenses({ setIsLoading }) {
   }, [expenseItems]);
 
   return (
-    <div className="flex flex-col px-4 w-full md:w-1/2 mx-auto pb-16">
-      <input
-        type="text"
-        id="name"
-        placeholder="Nombre del gasto"
-        onChange={(e) => setExpenseName(e.target.value)}
-        className="input input-bordered w-full mb-4"
-      />
-      <select
-        id="type"
-        defaultValue=""
-        className="select select-bordered w-full mb-4"
-        onChange={(e) => setExpenseType(e.target.value)}
-      >
-        <option disabled value="">
-          Tipo de gasto
-        </option>
-        <option value="Couta">3T</option>
-        <option value="Cena">Cena</option>
-      </select>
-      <ExpenseItems
-        players={players}
-        expenseItems={expenseItems}
-        setExpenseItems={setExpenseItems}
-      />
-      <h3 className="text-xl mb-4">Precio final: ${finalPrice}</h3>
-      <button className="btn mb-4" onClick={registerExpense}>
-        Registrar gasto
-      </button>
-      <hr className="mb-4" />
+    <div className="flex flex-col w-full md:w-1/2 mx-auto pb-16">
+      <div className="border rounded-lg p-4 bg-gray-100">
+        <input
+          type="text"
+          id="name"
+          placeholder="Nombre del gasto"
+          onChange={(e) => setExpenseName(e.target.value)}
+          className="input input-bordered w-full mb-4"
+        />
+        <select
+          id="type"
+          defaultValue=""
+          className="select select-bordered w-full mb-4"
+          onChange={(e) => setExpenseType(e.target.value)}
+        >
+          <option disabled value="">
+            Tipo de gasto
+          </option>
+          <option value="Couta">3T</option>
+          <option value="Cena">Cena</option>
+        </select>
+        <ExpenseItems
+          players={players}
+          expenseItems={expenseItems}
+          setExpenseItems={setExpenseItems}
+        />
+        <h3 className="text-xl mb-4">Precio final: ${finalPrice}</h3>
+        <button className="btn" onClick={registerExpense}>
+          Registrar gasto
+        </button>
+      </div>
+      <hr className="my-4" />
       <ExpensesList expensesList={expensesList} removeExpense={removeExpense} />
     </div>
   );

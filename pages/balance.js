@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import Loading from "./components/loading";
 import { getAllPaymentsRequest, getExpensesListRequest } from "./api/requests";
 import ExpensesList from "./components/expensesList";
+import SectionTitle from "./components/sectionTitle";
 
 export default function Balance() {
   const [isLoading, setIsLoading] = useState(false);
@@ -135,7 +136,8 @@ export default function Balance() {
     <div>
       {isLoading && <Loading />}
       <div className="w-full md:w-1/2 px-4 pb-16 max-h-screen mx-auto flex flex-col overflow-y-auto">
-        <h2 className="my-4 text-2xl font-bold text-center">Balance</h2>
+        <SectionTitle title="Balance" />
+
         <table className="table table-compact w-full text-center">
           <thead>
             <tr>

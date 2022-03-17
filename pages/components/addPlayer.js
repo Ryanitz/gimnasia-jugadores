@@ -41,7 +41,7 @@ export default function AddPlayer({ switchToPlayersTab, setIsLoading }) {
   };
 
   return (
-    <div className="flex flex-col justify-center px-4 pb-16 w-screen max-h-screen overflow-y-auto md:w-1/2 m-auto z-10">
+    <div className="flex flex-col justify-center pb-16 md:w-1/2 m-auto z-10">
       <input
         type="text"
         placeholder="Nombre"

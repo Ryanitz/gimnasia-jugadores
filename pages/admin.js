@@ -7,6 +7,7 @@ import Payments from "./components/payments";
 import Players from "./components/players";
 import Subjects from "./components/subjects";
 import Expenses from "./components/expenses";
+import SectionTitle from "./components/sectionTitle";
 
 export default function Home() {
   const [isLoading, setIsLoading] = useState(true);
@@ -67,8 +68,11 @@ export default function Home() {
   const loggedComponent = (
     <div>
       {isLoading && <Loading />}
-      <h1 className="text-center text-2xl py-4 font-bold">{activeTab}</h1>
-      {tabs[activeTab].component}
+      <div className="px-4">
+        <SectionTitle title={activeTab} />
+        {tabs[activeTab].component}
+      </div>
+
       <div className="tabs w-full z-40 fixed bottom-0 bg-white">
         {Object.keys(tabs).map((tab) => (
           <a

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { getPlayerPaymentsRequest, getPlayersRequest } from "./api/requests";
 import PlayerPayments from "./components/playerPayments";
+import SectionTitle from "./components/sectionTitle";
 
 export default function PlayersList() {
   const [isLoading, setIsLoading] = useState(false);
@@ -30,7 +31,7 @@ export default function PlayersList() {
 
   return (
     <div className="w-full md:w-1/2 px-4 pb-16 max-h-screen mx-auto flex flex-col overflow-y-auto">
-      <h2 className="my-4 text-2xl font-bold text-center">Jugadores</h2>
+      <SectionTitle title="Jugadores" />
 
       <select
         id="payer"

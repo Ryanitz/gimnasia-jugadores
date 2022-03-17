@@ -193,7 +193,7 @@ export default function Payments({ setIsLoading }) {
   }, [playerPayments]);
 
   return (
-    <div className="w-full md:w-1/2 px-4 pb-16 max-h-screen mx-auto flex flex-col overflow-y-auto">
+    <div className="w-full md:w-1/2 pb-16 max-h-screen mx-auto flex flex-col overflow-y-auto">
       <select
         id="payer"
         defaultValue={-1}

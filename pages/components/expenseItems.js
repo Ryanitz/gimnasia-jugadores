@@ -43,7 +43,7 @@ export default function ExpenseItems({
   };
 
   return (
-    <div className="border rounded-lg flex flex-col p-4 mb-4">
+    <div className="border rounded-lg flex flex-col p-4 mb-4 bg-gray-200">
       <h3 className="font-semibold text-xl mb-4">Items de la compra</h3>
       {expenseItems && expenseItems.length > 0 && (
         <ExpenseItemsTable
