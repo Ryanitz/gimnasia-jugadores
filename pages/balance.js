@@ -52,7 +52,7 @@ export default function Balance() {
     let calculateCoutasIncome = 0;
     let calculateDinnersIncome = 0;
     const filteredPaymentsList = paymentsList.filter(
-      (payment) => payment.subject !== "excedente"
+      (payment) => payment.subject !== "Excedente"
     );
     filteredPaymentsList.forEach(({ amount, subject }) => {
       if (subject.toLowerCase().includes("cuota"))
@@ -72,7 +72,7 @@ export default function Balance() {
     let calculateMonthlyCoutasOutcome = 0;
     let calculateMonthlyDinnersOutcome = 0;
     const filteredExpensesList = anExpensesList.filter(
-      (payment) => payment.subject !== "excedente"
+      (payment) => payment.subject !== "Excedente"
     );
     filteredExpensesList.forEach(({ totalPrice, type }) => {
       if (type.toLowerCase().includes("cuota"))
@@ -116,7 +116,7 @@ export default function Balance() {
     let calculateDinnersOutcome = 0;
 
     const filteredExpensesList = expensesList.filter(
-      (payment) => payment.subject !== "excedente"
+      (payment) => payment.subject !== "Excedente"
     );
     filteredExpensesList.forEach(({ type, totalPrice }) => {
       if (type.toLowerCase().includes("cuota"))
