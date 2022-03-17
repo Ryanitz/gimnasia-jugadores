@@ -1,8 +1,10 @@
+import Head from "next/head";
 import Link from "next/link";
 
 export default function Home() {
   return (
-    <div className="h-screen w-screen flex flex-col justify-center items-center px-4">
+    <div className="h-screen w-screen flex flex-col justify-center items-center px-4 bg-custom">
+      <img src="/escudo.jpeg" className="mb-4" />
       <Link href="/jugadores">
         <a className="btn mb-4 w-full md:w-1/2">Jugadores</a>
       </Link>

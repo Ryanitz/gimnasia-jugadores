@@ -22,3 +22,7 @@ a {
 .input-min-height {
   min-height: 3rem;
 }
+
+.bg-custom {
+  background-color: #f6f6f6;
+}

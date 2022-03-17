@@ -51,11 +51,13 @@ export default function Balance() {
     let finalIncome = 0;
     let calculateCoutasIncome = 0;
     let calculateDinnersIncome = 0;
-    paymentsList.forEach(({ amount, subject }) => {
+    const filteredPaymentsList = paymentsList.filter(
+      (payment) => payment.subject !== "excedente"
+    );
+    filteredPaymentsList.forEach(({ amount, subject }) => {
       if (subject.toLowerCase().includes("cuota"))
         calculateCoutasIncome += amount;
       else calculateDinnersIncome += amount;
-
       finalIncome += amount;
     });
     setCoutasIncome(calculateCoutasIncome);
@@ -69,7 +71,10 @@ export default function Balance() {
     let finalOutcome = 0;
     let calculateMonthlyCoutasOutcome = 0;
     let calculateMonthlyDinnersOutcome = 0;
-    anExpensesList.forEach(({ totalPrice, type }) => {
+    const filteredExpensesList = anExpensesList.filter(
+      (payment) => payment.subject !== "excedente"
+    );
+    filteredExpensesList.forEach(({ totalPrice, type }) => {
       if (type.toLowerCase().includes("cuota"))
         calculateMonthlyCoutasOutcome += totalPrice;
       else calculateMonthlyDinnersOutcome += totalPrice;
@@ -84,7 +89,11 @@ export default function Balance() {
     let finalIncome = 0;
     let calculateMonthlyCoutasIncome = 0;
     let calculateMonthlyDinnersIncome = 0;
-    aPaymentsList.forEach(({ amount, subject }) => {
+
+    const filteredPaymentsList = aPaymentsList.filter(
+      (payment) => payment.subject !== "excedente"
+    );
+    filteredPaymentsList.forEach(({ amount, subject }) => {
       if (subject.toLowerCase().includes("cuota"))
         calculateMonthlyCoutasIncome += amount;
       else calculateMonthlyDinnersIncome += amount;
@@ -105,7 +114,11 @@ export default function Balance() {
     let calculateOutcome = 0;
     let calculateCoutasOutcome = 0;
     let calculateDinnersOutcome = 0;
-    expensesList.forEach(({ type, totalPrice }) => {
+
+    const filteredExpensesList = expensesList.filter(
+      (payment) => payment.subject !== "excedente"
+    );
+    filteredExpensesList.forEach(({ type, totalPrice }) => {
       if (type.toLowerCase().includes("cuota"))
         calculateCoutasOutcome += totalPrice;
       else calculateDinnersOutcome += totalPrice;
@@ -150,21 +163,21 @@ export default function Balance() {
           <tbody>
             <tr className="hover">
               <td>3T</td>
-              <td>{coutasIncome}</td>
-              <td>{coutasOutcome}</td>
-              <td>{coutasIncome - coutasOutcome}</td>
+              <td>${coutasIncome}</td>
+              <td>${coutasOutcome}</td>
+              <td>${coutasIncome - coutasOutcome}</td>
             </tr>
             <tr className="hover">
               <td>Cenas</td>
-              <td>{dinnersIncome}</td>
-              <td>{dinnersOutcome}</td>
-              <td>{dinnersIncome - dinnersOutcome}</td>
+              <td>${dinnersIncome}</td>
+              <td>${dinnersOutcome}</td>
+              <td>${dinnersIncome - dinnersOutcome}</td>
             </tr>
             <tr className="hover">
               <td>Total</td>
-              <td>{income}</td>
-              <td>{outcome}</td>
-              <td>{income - outcome}</td>
+              <td>${income}</td>
+              <td>${outcome}</td>
+              <td>${income - outcome}</td>
             </tr>
           </tbody>
         </table>
@@ -204,21 +217,21 @@ export default function Balance() {
             <tbody>
               <tr className="hover">
                 <td>3T</td>
-                <td>{monthlyCoutasIncome}</td>
-                <td>{monthlyCoutasOutcome}</td>
-                <td>{monthlyCoutasIncome - monthlyCoutasOutcome}</td>
+                <td>${monthlyCoutasIncome}</td>
+                <td>${monthlyCoutasOutcome}</td>
+                <td>${monthlyCoutasIncome - monthlyCoutasOutcome}</td>
               </tr>
               <tr className="hover">
                 <td>Cenas</td>
-                <td>{monthlyDinnersIncome}</td>
-                <td>{monthlyDinnersOutcome}</td>
-                <td>{monthlyDinnersIncome - monthlyDinnersOutcome}</td>
+                <td>${monthlyDinnersIncome}</td>
+                <td>${monthlyDinnersOutcome}</td>
+                <td>${monthlyDinnersIncome - monthlyDinnersOutcome}</td>
               </tr>
               <tr className="hover">
                 <td>Total</td>
-                <td>{monthlyIncome}</td>
-                <td>{monthlyOutcome}</td>
-                <td>{monthlyIncome - monthlyOutcome}</td>
+                <td>${monthlyIncome}</td>
+                <td>${monthlyOutcome}</td>
+                <td>${monthlyIncome - monthlyOutcome}</td>
               </tr>
             </tbody>
           </table>
