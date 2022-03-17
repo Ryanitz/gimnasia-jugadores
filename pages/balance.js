@@ -91,7 +91,7 @@ export default function Balance() {
     let calculateMonthlyDinnersIncome = 0;
 
     const filteredPaymentsList = aPaymentsList.filter(
-      (payment) => payment.subject !== "excedente"
+      (payment) => payment.subject !== "Excedente"
     );
     filteredPaymentsList.forEach(({ amount, subject }) => {
       if (subject.toLowerCase().includes("cuota"))
