@@ -2,11 +2,11 @@ import { ApolloClient, InMemoryCache } from "@apollo/client";
 
 const defaultOptions = {
   watchQuery: {
-    fetchPolicy: "no-cache",
+    fetchPolicy: "network-only",
     errorPolicy: "ignore",
   },
   query: {
-    fetchPolicy: "no-cache",
+    fetchPolicy: "network-only",
     errorPolicy: "all",
   },
 };
