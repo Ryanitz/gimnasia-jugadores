@@ -57,19 +57,17 @@ export default function Payments({ setIsLoading }) {
     setIsLoading(false);
   };
 
-  const registerPayment = () => {
+  const registerPayment = async () => {
     if (payer !== -1 && selectedSubject >= 0 && payingAmount !== "") {
       setIsLoading(true);
 
-      console.log(date);
-
-      /* await registerPaymentRequest(
+      await registerPaymentRequest(
         players[payer].id,
         subjects[selectedSubject].name,
         parseFloat(payingAmount),
         date,
         calculateDebt()
-      ); */
+      );
 
       getPlayers();
       getPlayerPayments();
