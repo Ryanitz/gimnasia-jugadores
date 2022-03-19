@@ -1,6 +1,11 @@
 import React, { useState, useEffect } from "react";
 import Loading from "./components/loading";
-import { getAllPaymentsRequest, getExpensesListRequest } from "./api/requests";
+import {
+  getAllPaymentsRequest,
+  getExpensesBalanceBySubjectRequest,
+  getExpensesListRequest,
+  getPaymentsBalanceBySubjectRequest,
+} from "./api/requests";
 import ExpensesList from "./components/expensesList";
 import SectionTitle from "./components/sectionTitle";
 
@@ -39,32 +44,30 @@ export default function Balance() {
     "Diciembre",
   ];
 
-  const getExpensesList = async () => {
-    setExpenseList(await getExpensesListRequest());
-    setIsLoading(false);
-  };
-
   const calculateBalance = async () => {
-    const paymentsList = await getAllPaymentsRequest();
-    setPaymentsList(paymentsList);
-
-    let finalIncome = 0;
-    let calculateCoutasIncome = 0;
-    let calculateDinnersIncome = 0;
-    const filteredPaymentsList = paymentsList.filter(
-      (payment) => payment.subject !== "Excedente"
+    const calculateCuotasIncome = await getPaymentsBalanceBySubjectRequest(
+      "Cuota"
     );
-    filteredPaymentsList.forEach(({ amount, subject }) => {
-      if (subject.toLowerCase().includes("cuota"))
-        calculateCoutasIncome += amount;
-      else calculateDinnersIncome += amount;
-      finalIncome += amount;
-    });
-    setCoutasIncome(calculateCoutasIncome);
-    setDinnersIncome(calculateDinnersIncome);
-    setIncome(finalIncome);
+    const calculateDinnerIncome = await getPaymentsBalanceBySubjectRequest(
+      "Cena"
+    );
+    setCoutasIncome(calculateCuotasIncome);
+    setDinnersIncome(calculateDinnerIncome);
+    setIncome(calculateCuotasIncome + calculateDinnerIncome);
 
-    getExpensesList();
+    const calculateCuotasOutcome = await getExpensesBalanceBySubjectRequest(
+      "Cuota"
+    );
+    const calculateDinnerOutcome = await getExpensesBalanceBySubjectRequest(
+      "Cena"
+    );
+    setCoutasOutcome(calculateCuotasOutcome);
+    setDinnersOutcome(calculateDinnerOutcome);
+    setOutcome(calculateCuotasOutcome + calculateDinnerOutcome);
+
+    setExpenseList(await getExpensesListRequest());
+
+    setIsLoading(false);
   };
 
   const calculateOutcomeFromMonth = (anExpensesList) => {
@@ -110,28 +113,7 @@ export default function Balance() {
     calculateBalance();
   }, []);
 
-  useEffect(() => {
-    let calculateOutcome = 0;
-    let calculateCoutasOutcome = 0;
-    let calculateDinnersOutcome = 0;
-
-    const filteredExpensesList = expensesList.filter(
-      (payment) => payment.subject !== "Excedente"
-    );
-    filteredExpensesList.forEach(({ type, totalPrice }) => {
-      if (type.toLowerCase().includes("cuota"))
-        calculateCoutasOutcome += totalPrice;
-      else calculateDinnersOutcome += totalPrice;
-
-      calculateOutcome += totalPrice;
-    });
-
-    setCoutasOutcome(calculateCoutasOutcome);
-    setDinnersOutcome(calculateDinnersOutcome);
-    setOutcome(calculateOutcome);
-  }, [expensesList]);
-
-  useEffect(() => {
+  /* useEffect(() => {
     const filteredExpensesList = expensesList.filter((expense) => {
       const expenseDate = new Date(expense.date);
       return expenseDate.getMonth() === selectedMonth;
@@ -143,7 +125,7 @@ export default function Balance() {
 
     calculateOutcomeFromMonth(filteredExpensesList);
     calculateIncomeFromMonth(filteredPaymentsList);
-  }, [selectedMonth]);
+  }, [selectedMonth]); */
 
   return (
     <div>
@@ -181,7 +163,7 @@ export default function Balance() {
             </tr>
           </tbody>
         </table>
-        <hr className="my-4" />
+        {/* <hr className="my-4" />
         <div className="flex w-full justify-center items-center">
           <h2 className="text-2xl font-bold text-center">Balance de</h2>
           <select
@@ -235,7 +217,7 @@ export default function Balance() {
               </tr>
             </tbody>
           </table>
-        )}
+        )} */}
         <hr className="my-4" />
         <ExpensesList expensesList={expensesList} />
       </div>

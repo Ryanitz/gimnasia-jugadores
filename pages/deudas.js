@@ -77,6 +77,12 @@ export default function PlayersList() {
         ))}
       </select>
 
+      {debtSubjects.length === 0 && (
+        <h3 className="text-lg font-semibold">No tiene deudas</h3>
+      )}
+      {debtSubjects.length > 0 && (
+        <h3 className="text-lg font-semibold">Debe</h3>
+      )}
       {debtSubjects.length > 0 && <SubjectsTable subjects={debtSubjects} />}
     </div>
   );

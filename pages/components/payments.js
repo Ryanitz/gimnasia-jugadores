@@ -60,25 +60,28 @@ export default function Payments({ setIsLoading }) {
   const registerPayment = async () => {
     if (payer !== -1 && selectedSubject >= 0 && payingAmount !== "") {
       setIsLoading(true);
+      const debt = calculateDebt();
 
-      await registerPaymentRequest(
+      const payment = await registerPaymentRequest(
         players[payer].id,
         subjects[selectedSubject].name,
         parseFloat(payingAmount),
         date,
-        calculateDebt()
+        debt
       );
 
-      getPlayers();
-      getPlayerPayments();
+      setPlayerPayments([...playerPayments, payment]);
+      setIsLoading(false);
     }
   };
 
   const removePayment = async (aPaymentId) => {
     setIsLoading(true);
-    setPlayerPayments(
-      await removePaymentRequest(players[payer].id, aPaymentId)
+    const newPlayerPayments = playerPayments.filter(
+      ({ id }) => aPaymentId !== id
     );
+    await removePaymentRequest(players[payer].id, aPaymentId);
+    setPlayerPayments(newPlayerPayments);
     setIsLoading(false);
   };
 
@@ -193,7 +196,7 @@ export default function Payments({ setIsLoading }) {
   }, [playerPayments]);
 
   return (
-    <div className="w-full md:w-1/2 pb-16 max-h-screen mx-auto flex flex-col overflow-y-auto">
+    <div className="w-full md:w-1/2 pb-16 mx-auto flex flex-col overflow-y-auto">
       <select
         id="payer"
         defaultValue={-1}

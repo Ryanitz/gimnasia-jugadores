@@ -39,6 +39,22 @@ const GET_EXPENSES = gql`
     }
   }
 `;
+const GET_PAYMENTS_BALANCE = gql`
+  query Query {
+    aggregatePayment(
+      filter: { not: { subject: { allofterms: "Excedente" } } }
+    ) {
+      amountSum
+    }
+  }
+`;
+const GET_EXPENSES_BALANCE = gql`
+  query Query {
+    aggregateExpense {
+      totalPriceSum
+    }
+  }
+`;
 const ADD_PLAYER = gql`
   mutation Mutation($input: [AddPlayerInput!]!) {
     addPlayer(input: $input) {
@@ -54,10 +70,12 @@ const REGISTER_PAYMENT = gql`
   mutation Mutation($input: [AddPaymentInput!]!) {
     addPayment(input: $input) {
       payment {
-        amount
         id
-        payer
         subject
+        payingDate
+        payer
+        debt
+        amount
       }
     }
   }
@@ -226,6 +244,45 @@ export const getExpensesListRequest = async () => {
 
   return expenses;
 };
+export const getPaymentsBalanceBySubjectRequest = async (aSubjectKeyWord) => {
+  const response = await client.query({
+    query: gql`
+      query MyQuery {
+        aggregatePayment(filter: { subject: { anyofterms: "${aSubjectKeyWord}" } }) {
+          amountSum
+        }
+      }
+    `,
+  });
+
+  return response.data.aggregatePayment.amountSum;
+};
+export const getExpensesBalanceBySubjectRequest = async (aSubjectKeyWord) => {
+  const response = await client.query({
+    query: gql`
+      query Query {
+        aggregateExpense(filter: { type: { allofterms: "${aSubjectKeyWord}" } }) {
+          totalPriceSum
+        }
+      }
+    `,
+  });
+
+  return response.data.aggregateExpense.totalPriceSum;
+};
+export const getPaymentsBalanceByMonthRequest = async (aSubjectKeyWord) => {
+  const response = await client.query({
+    query: gql`
+      query MyQuery {
+        aggregatePayment(filter: { subject: { anyofterms: "${aSubjectKeyWord}" } }) {
+          amountSum
+        }
+      }
+    `,
+  });
+
+  return response.data.aggregatePayment.amountSum;
+};
 
 export const registerPlayerRequest = async (aPlayerName, aPlayerSurname) => {
   await client.mutate({
@@ -245,7 +302,7 @@ export const registerPaymentRequest = async (
   aPayingDate,
   aPayingDebt
 ) => {
-  await client.mutate({
+  const response = await client.mutate({
     mutation: REGISTER_PAYMENT,
     variables: {
       input: {
@@ -257,6 +314,8 @@ export const registerPaymentRequest = async (
       },
     },
   });
+
+  return response.data.addPayment.payment[0];
 };
 export const registerSubjectRequest = async (
   aSubjectName,
@@ -312,7 +371,7 @@ export const removePlayerRequest = async (aPlayerId) => {
     },
   });
 
-  return await getPlayersRequest();
+  return aPlayerId;
 };
 export const removePaymentRequest = async (aPlayerId, aPaymentId) => {
   await client.mutate({
