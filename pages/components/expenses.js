@@ -82,7 +82,7 @@ export default function Expenses({ setIsLoading }) {
             Tipo de gasto
           </option>
           <option value="Couta">3T</option>
-          <option value="Cena">Cena</option>
+          <option value="Actvidad">Actividad</option>
         </select>
         <ExpenseItems
           players={players}
