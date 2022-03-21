@@ -1,4 +1,5 @@
 import Head from "next/head";
+import { ToastProvider } from "react-toast-notifications";
 import "../styles/globals.css";
 
 function MyApp({ Component, pageProps }) {
@@ -7,7 +8,9 @@ function MyApp({ Component, pageProps }) {
       <Head>
         <title>Sistema Administrativo Gimnasia</title>
       </Head>
-      <Component {...pageProps} />
+      <ToastProvider autoDismiss={true} autoDismissTimeout="4000">
+        <Component {...pageProps} />
+      </ToastProvider>
     </div>
   );
 }

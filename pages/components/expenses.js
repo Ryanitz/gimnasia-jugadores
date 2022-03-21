@@ -36,6 +36,10 @@ export default function Expenses({ setIsLoading }) {
         )
       );
 
+      addToast(`Gasto ${expenseName} agregado`, {
+        appearance: "success",
+      });
+
       setExpenseName("");
       const expenseNameInput = document.getElementById("name");
       expenseNameInput.value = "";
@@ -47,6 +51,9 @@ export default function Expenses({ setIsLoading }) {
 
   const removeExpense = async (anExpenseId) => {
     setIsLoading(true);
+    addToast(`Gasto eliminado`, {
+      appearance: "success",
+    });
     setExpensesList(await removeExpenseRequest(anExpenseId));
     setIsLoading(false);
   };

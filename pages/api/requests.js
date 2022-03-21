@@ -72,6 +72,7 @@ const REGISTER_PAYMENT = gql`
       payment {
         id
         subject
+        subjectType
         payingDate
         payer
         debt
@@ -378,7 +379,7 @@ export const removePlayerRequest = async (aPlayerId) => {
   return aPlayerId;
 };
 export const removePaymentRequest = async (aPlayerId, aPaymentId) => {
-  await client.mutate({
+  const response = await client.mutate({
     mutation: REMOVE_PAYMENT,
     variables: {
       filter: {
@@ -387,7 +388,9 @@ export const removePaymentRequest = async (aPlayerId, aPaymentId) => {
     },
   });
 
-  return await getPlayerPaymentsRequest(aPlayerId);
+  console.log(response);
+
+  return true;
 };
 export const removeSubjectRequest = async (aSubjectId) => {
   await client.mutate({

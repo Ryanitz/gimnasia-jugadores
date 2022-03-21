@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { useToasts } from "react-toast-notifications";
 import {
   getPlayerPaymentsRequest,
   getPlayersRequest,
@@ -20,6 +21,8 @@ export default function Payments({ setIsLoading }) {
   const [playerPayments, setPlayerPayments] = useState([]);
   const [playerSubjectsNotPaid, setPlayerSubjectsNotPaid] = useState([]);
   const [date, setDate] = useState("");
+
+  const { addToast } = useToasts();
 
   const setPayingAmountCuota = (aPayerIndex) => {
     let value = 0;
@@ -73,6 +76,12 @@ export default function Payments({ setIsLoading }) {
         debt
       );
 
+      addToast(`Pago de "${subject.name}" registrado`, {
+        appearance: "success",
+      });
+
+      console.log(payment);
+
       setPlayerPayments([...playerPayments, payment]);
       setIsLoading(false);
     }
@@ -83,7 +92,13 @@ export default function Payments({ setIsLoading }) {
     const newPlayerPayments = playerPayments.filter(
       ({ id }) => aPaymentId !== id
     );
+
     await removePaymentRequest(players[payer].id, aPaymentId);
+
+    addToast(`Pago eliminado`, {
+      appearance: "success",
+    });
+
     setPlayerPayments(newPlayerPayments);
     setIsLoading(false);
   };
