@@ -46,20 +46,20 @@ export default function Balance() {
 
   const calculateBalance = async () => {
     const calculateCuotasIncome = await getPaymentsBalanceBySubjectRequest(
-      "Cuota"
+      "cuota"
     );
     const calculateDinnerIncome = await getPaymentsBalanceBySubjectRequest(
-      "Cena"
+      "actividad"
     );
     setCoutasIncome(calculateCuotasIncome);
     setDinnersIncome(calculateDinnerIncome);
     setIncome(calculateCuotasIncome + calculateDinnerIncome);
 
     const calculateCuotasOutcome = await getExpensesBalanceBySubjectRequest(
-      "Cuota"
+      "cuota"
     );
     const calculateDinnerOutcome = await getExpensesBalanceBySubjectRequest(
-      "Cena"
+      "actividad"
     );
     setCoutasOutcome(calculateCuotasOutcome);
     setDinnersOutcome(calculateDinnerOutcome);
@@ -75,7 +75,7 @@ export default function Balance() {
     let calculateMonthlyCoutasOutcome = 0;
     let calculateMonthlyDinnersOutcome = 0;
     const filteredExpensesList = anExpensesList.filter(
-      (payment) => payment.subject !== "Excedente"
+      (payment) => payment.subject !== "excedente"
     );
     filteredExpensesList.forEach(({ totalPrice, type }) => {
       if (type.toLowerCase().includes("cuota"))
@@ -94,7 +94,7 @@ export default function Balance() {
     let calculateMonthlyDinnersIncome = 0;
 
     const filteredPaymentsList = aPaymentsList.filter(
-      (payment) => payment.subject !== "Excedente"
+      (payment) => payment.subject !== "excedente"
     );
     filteredPaymentsList.forEach(({ amount, subject }) => {
       if (subject.toLowerCase().includes("cuota"))

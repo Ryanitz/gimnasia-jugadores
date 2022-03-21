@@ -31,7 +31,6 @@ export default function Payments({ setIsLoading }) {
     if (amountInput) amountInput.value = value !== 0 ? value : "";
   };
   const setPayingAmountNormal = (aSubjectIndex) => {
-    console.log(subjects[aSubjectIndex]);
     setPayingAmount(subjects[aSubjectIndex].amount);
     const amountInput = document.getElementById("amount");
     if (amountInput) amountInput.value = subjects[aSubjectIndex].amount;
@@ -39,7 +38,8 @@ export default function Payments({ setIsLoading }) {
 
   const settingAmount = {
     cuota: setPayingAmountCuota,
-    normal: setPayingAmountNormal,
+    actividad: setPayingAmountNormal,
+    excedente: setPayingAmountNormal,
   };
 
   const feeValues = [0, 1700, 2700, 4000, 6000, 12000];
@@ -62,9 +62,12 @@ export default function Payments({ setIsLoading }) {
       setIsLoading(true);
       const debt = calculateDebt();
 
+      const subject = subjects[selectedSubject];
+
       const payment = await registerPaymentRequest(
         players[payer].id,
-        subjects[selectedSubject].name,
+        subject.name,
+        subject.type,
         parseFloat(payingAmount),
         date,
         debt

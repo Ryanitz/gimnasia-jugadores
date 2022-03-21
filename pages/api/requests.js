@@ -203,6 +203,7 @@ export const getAllPaymentsRequest = async () => {
           payer
           amount
           subject
+          subjectType
           payingDate
           debt
         }
@@ -211,12 +212,13 @@ export const getAllPaymentsRequest = async () => {
   });
 
   const payments = response.data.queryPayment.map(
-    ({ id, payer, amount, subject, payingDate, debt }) => {
+    ({ id, payer, amount, subject, subjectType, payingDate, debt }) => {
       return {
         id,
         payer,
         amount,
         subject,
+        subjectType,
         payingDate,
         debt,
       };
@@ -298,6 +300,7 @@ export const registerPlayerRequest = async (aPlayerName, aPlayerSurname) => {
 export const registerPaymentRequest = async (
   aPlayerId,
   aSubject,
+  aSubjectType,
   aPayingAmount,
   aPayingDate,
   aPayingDebt
@@ -309,6 +312,7 @@ export const registerPaymentRequest = async (
         payer: aPlayerId,
         amount: aPayingAmount,
         subject: aSubject,
+        subjectType: aSubjectType,
         payingDate: aPayingDate,
         debt: aPayingDebt,
       },
