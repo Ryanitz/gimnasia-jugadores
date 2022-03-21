@@ -97,16 +97,19 @@ export default function Home() {
       <input
         type="text"
         placeholder="Ingrese usuario"
-        className="input input-min-height input-bordered w-full md:w-1/2 mb-4"
+        className="input input-min-height input-bordered w-full md:w-3/4 lg:w-1/2 transition-all mb-4"
         onChange={(e) => setUsername(e.target.value)}
       />
       <input
         type="password"
         placeholder="Ingrese contraseña"
-        className="input input-min-height input-bordered w-full  md:w-1/2 mb-4"
+        className="input input-min-height input-bordered w-full  md:w-3/4 lg:w-1/2 transition-all mb-4"
         onChange={(e) => setPassword(e.target.value)}
       />
-      <button onClick={checkLogin} className="btn w-full md:w-1/2">
+      <button
+        onClick={checkLogin}
+        className="btn w-full md:w-3/4 lg:w-1/2 transition-all"
+      >
         Loguearse
       </button>
     </div>

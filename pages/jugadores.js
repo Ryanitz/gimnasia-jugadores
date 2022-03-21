@@ -30,7 +30,7 @@ export default function PlayersList() {
   }, [payer]);
 
   return (
-    <div className="w-full md:w-1/2 px-4 pb-16 max-h-screen mx-auto flex flex-col overflow-y-auto">
+    <div className="w-full md:w-3/4 lg:w-1/2 transition-all px-4 pb-16 max-h-screen mx-auto flex flex-col overflow-y-auto">
       <SectionTitle title="Jugadores" />
 
       <select

@@ -21,8 +21,8 @@ export default function Players({ setIsLoading }) {
   }, []);
 
   return (
-    <div className="overflow-auto pb-16">
-      <table className="table w-full">
+    <div className="overflow-auto pb-16 flex justify-center">
+      <table className="table w-full md:w-3/4 lg:w-1/2 transition-all">
         <thead>
           <tr>
             <th></th>

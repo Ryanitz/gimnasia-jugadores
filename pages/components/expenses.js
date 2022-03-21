@@ -70,7 +70,7 @@ export default function Expenses({ setIsLoading }) {
   }, [expenseItems]);
 
   return (
-    <div className="flex flex-col w-full md:w-1/2 mx-auto pb-16">
+    <div className="flex flex-col w-full md:w-3/4 lg:w-1/2 transition-all mx-auto pb-16">
       <div className="border rounded-lg p-4 bg-gray-100">
         <input
           type="text"
