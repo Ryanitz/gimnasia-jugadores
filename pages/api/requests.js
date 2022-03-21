@@ -248,7 +248,7 @@ export const getPaymentsBalanceBySubjectRequest = async (aSubjectKeyWord) => {
   const response = await client.query({
     query: gql`
       query MyQuery {
-        aggregatePayment(filter: { subject: { anyofterms: "${aSubjectKeyWord}" } }) {
+        aggregatePayment(filter: { subjectType: { anyofterms: "${aSubjectKeyWord}" } }) {
           amountSum
         }
       }
