@@ -96,17 +96,15 @@ export default function Balance() {
 
   useEffect(() => {
     const date = new Date();
-    console.log(selectedMonth);
     date.setMonth(selectedMonth + 1);
     date.setDate(0);
+
     const minDate = `${date.getFullYear()}-${
       (date.getMonth() < 9 ? "0" : "") + (date.getMonth() + 1)
     }-01`;
     const maxDate = `${date.getFullYear()}-${
       (date.getMonth() < 9 ? "0" : "") + (date.getMonth() + 1)
     }-${(date.getDate() < 10 ? "0" : "") + date.getDate()}`;
-    console.log(minDate);
-    console.log(maxDate);
 
     calculateOutcomeFromMonth(minDate, maxDate);
     calculateIncomeFromMonth(minDate, maxDate);
