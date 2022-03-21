@@ -150,7 +150,7 @@ export default function Balance() {
               <td>${coutasIncome - coutasOutcome}</td>
             </tr>
             <tr className="hover">
-              <td>Cenas</td>
+              <td>Actividades</td>
               <td>${dinnersIncome}</td>
               <td>${dinnersOutcome}</td>
               <td>${dinnersIncome - dinnersOutcome}</td>
@@ -204,7 +204,7 @@ export default function Balance() {
                 <td>${monthlyCoutasIncome - monthlyCoutasOutcome}</td>
               </tr>
               <tr className="hover">
-                <td>Cenas</td>
+                <td>Actividades</td>
                 <td>${monthlyDinnersIncome}</td>
                 <td>${monthlyDinnersOutcome}</td>
                 <td>${monthlyDinnersIncome - monthlyDinnersOutcome}</td>
