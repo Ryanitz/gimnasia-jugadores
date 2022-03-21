@@ -273,11 +273,25 @@ export const getExpensesBalanceBySubjectRequest = async (aSubjectKeyWord) => {
 
   return response.data.aggregateExpense.totalPriceSum;
 };
-export const getPaymentsBalanceByMonthRequest = async (aSubjectKeyWord) => {
+export const getPaymentsBalanceByDatesRequest = async (
+  aSubjectKeyWord,
+  aMinDate,
+  aMaxDate
+) => {
   const response = await client.query({
     query: gql`
       query MyQuery {
-        aggregatePayment(filter: { subject: { anyofterms: "${aSubjectKeyWord}" } }) {
+        aggregatePayment(
+          filter: {
+            payingDate: {
+              between: {
+                min: "${aMinDate}T00:00:00.247Z"
+                max: "${aMaxDate}T23:59:59.247Z"
+              }
+            }
+            subjectType: { allofterms: "${aSubjectKeyWord}" }
+          }
+        ) {
           amountSum
         }
       }
@@ -285,6 +299,33 @@ export const getPaymentsBalanceByMonthRequest = async (aSubjectKeyWord) => {
   });
 
   return response.data.aggregatePayment.amountSum;
+};
+export const getExpensesBalanceByDatesRequest = async (
+  aSubjectKeyWord,
+  aMinDate,
+  aMaxDate
+) => {
+  const response = await client.query({
+    query: gql`
+      query MyQuery {
+        aggregateExpense(
+          filter: {
+            date: {
+              between: {
+                min: "${aMinDate}T00:00:00.247Z"
+                max: "${aMaxDate}T23:59:59.247Z"
+              }
+            }
+            type: { allofterms: "${aSubjectKeyWord}" }
+          }
+        ) {
+          totalPriceSum
+        }
+      }
+    `,
+  });
+
+  return response.data.aggregateExpense.totalPriceSum;
 };
 
 export const registerPlayerRequest = async (aPlayerName, aPlayerSurname) => {

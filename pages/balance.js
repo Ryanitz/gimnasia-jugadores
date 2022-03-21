@@ -2,8 +2,10 @@ import React, { useState, useEffect } from "react";
 import Loading from "./components/loading";
 import {
   getAllPaymentsRequest,
+  getExpensesBalanceByDatesRequest,
   getExpensesBalanceBySubjectRequest,
   getExpensesListRequest,
+  getPaymentsBalanceByDatesRequest,
   getPaymentsBalanceBySubjectRequest,
 } from "./api/requests";
 import ExpensesList from "./components/expensesList";
@@ -70,42 +72,21 @@ export default function Balance() {
     setIsLoading(false);
   };
 
-  const calculateOutcomeFromMonth = (anExpensesList) => {
-    let finalOutcome = 0;
-    let calculateMonthlyCoutasOutcome = 0;
-    let calculateMonthlyDinnersOutcome = 0;
-    const filteredExpensesList = anExpensesList.filter(
-      (payment) => payment.subject !== "excedente"
+  const calculateOutcomeFromMonth = async (aMinDate, aMaxDate) => {
+    setMonthlyCoutasOutcome(
+      await getExpensesBalanceByDatesRequest("cuota", aMinDate, aMaxDate)
     );
-    filteredExpensesList.forEach(({ totalPrice, type }) => {
-      if (type.toLowerCase().includes("cuota"))
-        calculateMonthlyCoutasOutcome += totalPrice;
-      else calculateMonthlyDinnersOutcome += totalPrice;
-
-      finalOutcome += totalPrice;
-    });
-    setMonthlyCoutasOutcome(calculateMonthlyCoutasOutcome);
-    setMonthlyDinnersOutcome(calculateMonthlyDinnersOutcome);
-    setMonthlyOutcome(finalOutcome);
+    setMonthlyDinnersOutcome(
+      await getExpensesBalanceByDatesRequest("actividad", aMinDate, aMaxDate)
+    );
   };
-  const calculateIncomeFromMonth = (aPaymentsList) => {
-    let finalIncome = 0;
-    let calculateMonthlyCoutasIncome = 0;
-    let calculateMonthlyDinnersIncome = 0;
-
-    const filteredPaymentsList = aPaymentsList.filter(
-      (payment) => payment.subject !== "excedente"
+  const calculateIncomeFromMonth = async (aMinDate, aMaxDate) => {
+    setMonthlyCoutasIncome(
+      await getPaymentsBalanceByDatesRequest("cuota", aMinDate, aMaxDate)
     );
-    filteredPaymentsList.forEach(({ amount, subject }) => {
-      if (subject.toLowerCase().includes("cuota"))
-        calculateMonthlyCoutasIncome += amount;
-      else calculateMonthlyDinnersIncome += amount;
-
-      finalIncome += amount;
-    });
-    setMonthlyCoutasIncome(calculateMonthlyCoutasIncome);
-    setMonthlyDinnersIncome(calculateMonthlyDinnersIncome);
-    setMonthlyIncome(finalIncome);
+    setMonthlyDinnersIncome(
+      await getPaymentsBalanceByDatesRequest("actividad", aMinDate, aMaxDate)
+    );
   };
 
   useEffect(() => {
@@ -113,19 +94,23 @@ export default function Balance() {
     calculateBalance();
   }, []);
 
-  /* useEffect(() => {
-    const filteredExpensesList = expensesList.filter((expense) => {
-      const expenseDate = new Date(expense.date);
-      return expenseDate.getMonth() === selectedMonth;
-    });
-    const filteredPaymentsList = paymentsList.filter((payment) => {
-      const paymentDate = new Date(payment.payingDate);
-      return paymentDate.getMonth() === selectedMonth;
-    });
+  useEffect(() => {
+    const date = new Date();
+    console.log(selectedMonth);
+    date.setMonth(selectedMonth + 1);
+    date.setDate(0);
+    const minDate = `${date.getFullYear()}-${
+      (date.getMonth() < 9 ? "0" : "") + (date.getMonth() + 1)
+    }-01`;
+    const maxDate = `${date.getFullYear()}-${
+      (date.getMonth() < 9 ? "0" : "") + (date.getMonth() + 1)
+    }-${(date.getDate() < 10 ? "0" : "") + date.getDate()}`;
+    console.log(minDate);
+    console.log(maxDate);
 
-    calculateOutcomeFromMonth(filteredExpensesList);
-    calculateIncomeFromMonth(filteredPaymentsList);
-  }, [selectedMonth]); */
+    calculateOutcomeFromMonth(minDate, maxDate);
+    calculateIncomeFromMonth(minDate, maxDate);
+  }, [selectedMonth]);
 
   return (
     <div>
@@ -163,7 +148,7 @@ export default function Balance() {
             </tr>
           </tbody>
         </table>
-        {/* <hr className="my-4" />
+        <hr className="my-4" />
         <div className="flex w-full justify-center items-center">
           <h2 className="text-2xl font-bold text-center">Balance de</h2>
           <select
@@ -211,13 +196,18 @@ export default function Balance() {
               </tr>
               <tr className="hover">
                 <td>Total</td>
-                <td>${monthlyIncome}</td>
-                <td>${monthlyOutcome}</td>
-                <td>${monthlyIncome - monthlyOutcome}</td>
+                <td>${monthlyCoutasIncome + monthlyDinnersIncome}</td>
+                <td>${monthlyCoutasOutcome + monthlyDinnersOutcome}</td>
+                <td>
+                  $
+                  {monthlyCoutasIncome +
+                    monthlyDinnersIncome -
+                    (monthlyCoutasOutcome + monthlyDinnersOutcome)}
+                </td>
               </tr>
             </tbody>
           </table>
-        )} */}
+        )}
         <hr className="my-4" />
         <ExpensesList expensesList={expensesList} />
       </div>
