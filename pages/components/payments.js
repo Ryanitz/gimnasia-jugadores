@@ -245,7 +245,7 @@ export default function Payments({ setIsLoading }) {
         }}
       >
         <option value={-1}>Elija un asunto</option>
-        {subjects.map(({ name }, index) => (
+        {playerSubjectsNotPaid.map(({ name }, index) => (
           <option value={index} key={index}>
             {name}
           </option>
