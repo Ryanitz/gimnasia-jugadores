@@ -7,7 +7,7 @@ export default function Home() {
   const [password, setPassword] = useState("");
 
   const checkLogin = () => {
-    if (username.toLowerCase() === "gimnasia" && password === "Jugadores;") {
+    if (username.toLowerCase() === "gimnasia" && password === "Jugadores?") {
       setIsLogged(true);
       localStorage.setItem("loggedGimnasia", true);
     }
