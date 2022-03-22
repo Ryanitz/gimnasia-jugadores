@@ -34,9 +34,10 @@ export default function Payments({ setIsLoading }) {
     if (amountInput) amountInput.value = value !== 0 ? value : "";
   };
   const setPayingAmountNormal = (aSubjectIndex) => {
-    setPayingAmount(subjects[aSubjectIndex].amount);
+    setPayingAmount(playerSubjectsNotPaid[aSubjectIndex].amount);
     const amountInput = document.getElementById("amount");
-    if (amountInput) amountInput.value = subjects[aSubjectIndex].amount;
+    if (amountInput)
+      amountInput.value = playerSubjectsNotPaid[aSubjectIndex].amount;
   };
 
   const settingAmount = {
@@ -207,7 +208,7 @@ export default function Payments({ setIsLoading }) {
     if (payer !== -1) {
       setPlayerSubjectsNotPaid(
         subjects.filter((subject) => {
-          return !hasPaidSubject(subject.name);
+          return subject.name === "Excedente" || !hasPaidSubject(subject.name);
         })
       );
     }
