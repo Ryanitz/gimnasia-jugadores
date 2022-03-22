@@ -65,7 +65,7 @@ export default function Payments({ setIsLoading }) {
       setIsLoading(true);
       const debt = calculateDebt();
 
-      const subject = subjects[selectedSubject];
+      const subject = playerSubjectsNotPaid[selectedSubject];
 
       const payment = await registerPaymentRequest(
         players[payer].id,
@@ -111,14 +111,14 @@ export default function Payments({ setIsLoading }) {
   const changeSubject = (aSubjectIndex) => {
     setSelectedSubject(parseInt(aSubjectIndex));
     if (parseInt(aSubjectIndex) !== -1) {
-      const type = subjects[aSubjectIndex].type;
+      const type = playerSubjectsNotPaid[aSubjectIndex].type;
       settingAmount[type](type === "cuota" ? payer : aSubjectIndex);
     }
   };
   const changePayer = (aPayerIndex) => {
     setPayer(aPayerIndex);
     if (selectedSubject !== -1) {
-      const type = subjects[selectedSubject].type;
+      const type = playerSubjectsNotPaid[selectedSubject].type;
       settingAmount[type](type === "cuota" ? aPayerIndex : selectedSubject);
     }
   };
@@ -148,10 +148,10 @@ export default function Payments({ setIsLoading }) {
   };
 
   const calculateDebt = () => {
-    if (subjects[selectedSubject].type !== "cuota") return 0;
+    if (playerSubjectsNotPaid[selectedSubject].type !== "cuota") return 0;
 
     const payingDate = new Date(date);
-    const dueDate = new Date(subjects[selectedSubject].dueDate);
+    const dueDate = new Date(playerSubjectsNotPaid[selectedSubject].dueDate);
 
     const payerData = players[payer];
     let payingType = payerData.payingType;
