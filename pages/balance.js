@@ -91,7 +91,8 @@ export default function Balance() {
 
   useEffect(() => {
     setIsLoading(true);
-    calculateBalance();
+    if (!localStorage.getItem("loggedGimnasia")) window.location.replace("/");
+    else calculateBalance();
   }, []);
 
   useEffect(() => {

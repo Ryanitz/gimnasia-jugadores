@@ -22,7 +22,8 @@ export default function PlayersList() {
 
   useEffect(() => {
     setIsLoading(true);
-    getPlayers();
+    if (!localStorage.getItem("loggedGimnasia")) window.location.replace("/");
+    else getPlayers();
   }, []);
 
   useEffect(() => {
