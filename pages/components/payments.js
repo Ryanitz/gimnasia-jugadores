@@ -207,7 +207,7 @@ export default function Payments({ setIsLoading }) {
     if (payer !== -1) {
       setPlayerSubjectsNotPaid(
         subjects.filter((subject) => {
-          return !hasPaidSubject(subject.name) && subject.name !== "Excedente";
+          return !hasPaidSubject(subject.name);
         })
       );
     }
@@ -281,7 +281,7 @@ export default function Payments({ setIsLoading }) {
           <h2 className="text-xl font-bold text-center my-4">
             Asuntos no pagados
           </h2>
-          <SubjectsTable subjects={playerSubjectsNotPaid} />
+          <SubjectsTable subjects={playerSubjectsNotPaid} hideSurplus={true} />
         </div>
       )}
     </div>
