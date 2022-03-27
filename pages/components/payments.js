@@ -68,12 +68,6 @@ export default function Payments({ setIsLoading }) {
 
       const subject = playerSubjectsNotPaid[selectedSubject];
 
-      console.log("DATE", date);
-      console.log("DEBT", debt);
-      console.log("PAYERID", players[payer].id);
-      console.log("SUBJECT", subject);
-      console.log("PAYING", payingAmount);
-
       const payment = await registerPaymentRequest(
         players[payer].id,
         subject.name,
