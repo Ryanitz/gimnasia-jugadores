@@ -132,18 +132,17 @@ export default function Payments({ setIsLoading }) {
         : date.getMonth() + 1;
 
     dateInput.value = `${date.getFullYear()}-${month}-${day}`;
-    setDate(date);
+    setDate(new Date(date.getFullYear(), month - 1, day));
   };
 
   const setCustomDate = (aDate) => {
     const dateSplit = aDate.split("-");
-    setDate(
-      new Date(
-        parseInt(dateSplit[0]),
-        parseInt(dateSplit[1]) - 1,
-        parseInt(dateSplit[2])
-      )
+    const date = new Date(
+      parseInt(dateSplit[0]),
+      parseInt(dateSplit[1]) - 1,
+      parseInt(dateSplit[2])
     );
+    setDate(date);
   };
 
   const calculateDebt = () => {
