@@ -1,20 +1,20 @@
-import React, { useState, useEffect } from "react";
-import Link from "next/link";
+import React, { useState, useEffect } from 'react';
+import Link from 'next/link';
 
 export default function Home() {
   const [isLogged, setIsLogged] = useState(false);
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
 
   const checkLogin = () => {
-    if (username.toLowerCase() === "gimnasia" && password === "Jugadores?") {
+    if (username.toLowerCase() === 'gimnasia' && password === 'Jugadores?') {
       setIsLogged(true);
-      localStorage.setItem("loggedGimnasia", true);
+      localStorage.setItem('loggedGimnasia', true);
     }
   };
 
   useEffect(() => {
-    setIsLogged(!!localStorage.getItem("loggedGimnasia"));
+    setIsLogged(!!localStorage.getItem('loggedGimnasia'));
   }, []);
 
   const loggedComponent = (
@@ -33,6 +33,11 @@ export default function Home() {
       <Link href="/balance">
         <a className="btn w-full mb-4 md:w-3/4 lg:w-1/2 transition-all">
           Balance
+        </a>
+      </Link>
+      <Link href="/deudores">
+        <a className="btn btn-warning mb-4 w-full md:w-3/4 lg:w-1/2 transition-all">
+          Lista de deudores
         </a>
       </Link>
       <Link href="/admin">

@@ -260,6 +260,24 @@ export const getPaymentsBalanceBySubjectRequest = async (aSubjectKeyWord) => {
 
   return response.data.aggregatePayment.amountSum;
 };
+export const hasPlayerPaidSubject = async (playerId, subjectName) => {
+  const response = await client.query({
+    query: gql`
+      query MyQuery {
+        queryPayment(
+          filter: {
+            payer: { allofterms: "${playerId}" }
+            subject: { allofterms: "${subjectName}" }
+          }
+        ) {
+          id
+        }
+      }
+    `,
+  });
+
+  return response.data.queryPayment.length > 0;
+};
 export const getExpensesBalanceBySubjectRequest = async (aSubjectKeyWord) => {
   const response = await client.query({
     query: gql`
@@ -428,8 +446,6 @@ export const removePaymentRequest = async (aPlayerId, aPaymentId) => {
       },
     },
   });
-
-  console.log(response);
 
   return true;
 };
