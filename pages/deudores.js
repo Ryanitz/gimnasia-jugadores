@@ -7,7 +7,6 @@ import {
 } from './api/requests';
 import SectionTitle from './components/sectionTitle';
 import Loading from './components/loading';
-import { feeValues } from './components/constants';
 
 export default function Deudores() {
   const [isLoading, setIsLoading] = useState(false);
@@ -16,6 +15,8 @@ export default function Deudores() {
   const [playersDebtList, setPlayersDebtList] = useState([]);
   const [playersDebtListFiltered, setPlayersDebtListFiltered] = useState([]);
   const [filteredSubject, setFilteredSubject] = useState('');
+
+  feeValues = [0, 1700, 2700, 4000, 6000, 12000];
 
   const getPlayers = async () => {
     setPlayers(await getPlayersRequest());
