@@ -63,18 +63,6 @@ export default function Deudores() {
     else getPlayers();
   }, []);
 
-  useEffect(() => {
-    const update = async () => {
-      setPlayersDebtListFiltered(
-        await playersDebtList.filter(
-          ({ player, subject }) =>
-            subject.id === filteredSubject || filteredSubject === ''
-        )
-      );
-    };
-    update();
-  }, [filteredSubject]);
-
   return (
     <div>
       {isLoading && <Loading />}
