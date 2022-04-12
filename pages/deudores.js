@@ -60,7 +60,8 @@ export default function Deudores() {
 
   useEffect(() => {
     setIsLoading(true);
-    if (!localStorage.getItem('loggedGimnasia')) window.location.replace('/');
+    if (!localStorage.getItem('loggedGimnasiaAdmin'))
+      window.location.replace('/');
     else getPlayers();
   }, []);
 

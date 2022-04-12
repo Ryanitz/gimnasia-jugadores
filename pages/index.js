@@ -35,11 +35,11 @@ export default function Home() {
           Balance
         </a>
       </Link>
-      <Link href="/deudores">
+      {/* <Link href="/deudores">
         <a className="btn btn-warning mb-4 w-full md:w-3/4 lg:w-1/2 transition-all">
           Lista de deudores
         </a>
-      </Link>
+      </Link> */}
       <Link href="/admin">
         <a className="btn w-full md:w-3/4 lg:w-1/2 transition-all">
           Administrador
