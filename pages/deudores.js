@@ -63,13 +63,16 @@ export default function Deudores() {
     else getPlayers();
   }, []);
 
-  useEffect(async () => {
-    setPlayersDebtListFiltered(
-      await playersDebtList.filter(
-        ({ player, subject }) =>
-          subject.id === filteredSubject || filteredSubject === ''
-      )
-    );
+  useEffect(() => {
+    const update = async () => {
+      setPlayersDebtListFiltered(
+        await playersDebtList.filter(
+          ({ player, subject }) =>
+            subject.id === filteredSubject || filteredSubject === ''
+        )
+      );
+    };
+    update();
   }, [filteredSubject]);
 
   return (
