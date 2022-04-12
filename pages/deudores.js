@@ -1,6 +1,6 @@
+/* eslint no-use-before-define: 0 */
 import React, { useState, useEffect } from 'react';
 import {
-  getPlayerPaymentsRequest,
   getPlayersRequest,
   getSubjectsRequest,
   hasPlayerPaidSubject,
@@ -62,6 +62,18 @@ export default function Deudores() {
     if (!localStorage.getItem('loggedGimnasia')) window.location.replace('/');
     else getPlayers();
   }, []);
+
+  useEffect(() => {
+    const update = async () => {
+      setPlayersDebtListFiltered(
+        await playersDebtList.filter(
+          ({ player, subject }) =>
+            subject.id === filteredSubject || filteredSubject === ''
+        )
+      );
+    };
+    update();
+  }, [filteredSubject]);
 
   return (
     <div>
