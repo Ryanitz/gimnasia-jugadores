@@ -1,5 +1,5 @@
-import { gql } from "@apollo/client";
-import client from "../../apollo-client";
+import { gql } from '@apollo/client';
+import client from '../../apollo-client';
 
 const GET_PLAYERS = gql`
   query Query {
@@ -373,7 +373,7 @@ export const registerSubjectRequest = async (
     name: aSubjectName,
     type: aSubjectType,
   };
-  if (aSubjectType === "cuota") input.dueDate = aSubjectDueDate;
+  if (aSubjectType === 'cuota') input.dueDate = aSubjectDueDate;
   else input.amount = aSubjectAmount;
 
   await client.mutate({
@@ -485,7 +485,7 @@ export const updatePaymentDebtRequest = async (
 ) => {
   await client.mutate({
     mutation: gql`
-      mutation Mutation($id: [ID!], $debt: Int!, $amount: Int!) {
+      mutation Mutation($id: [ID!], $debt: Float!, $amount: Float!) {
         updatePayment(
           input: { filter: { id: $id }, set: { debt: $debt, amount: $amount } }
         ) {
