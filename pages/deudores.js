@@ -16,7 +16,7 @@ export default function Deudores() {
   const [playersDebtListFiltered, setPlayersDebtListFiltered] = useState([]);
   const [filteredSubject, setFilteredSubject] = useState('');
 
-  feeValues = [0, 1700, 2700, 4000, 6000, 12000];
+  const feeValues = [0, 1700, 2700, 4000, 6000, 12000];
 
   const getPlayers = async () => {
     setPlayers(await getPlayersRequest());
