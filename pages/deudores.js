@@ -36,9 +36,10 @@ export default function Deudores() {
     for (const player of players) {
       for (const subject of subjects) {
         if (
-          subject.name.toLowerCase().includes('cena') ||
-          subject.name.toLowerCase().includes('cuota') ||
-          subject.type.toLowerCase().includes('actividad')
+          (subject.name.toLowerCase().includes('cena') ||
+            subject.name.toLowerCase().includes('cuota') ||
+            subject.type.toLowerCase().includes('actividad')) &&
+          subject.id === filteredSubject
         ) {
           const hasPaidSubject = await hasPlayerPaidSubject(
             player.id,
@@ -48,6 +49,7 @@ export default function Deudores() {
             subjectsNotPaidByPlayers.push({ player, subject });
         }
       }
+      console.log(subjectsNotPaidByPlayers);
     }
     setPlayersDebtList(subjectsNotPaidByPlayers);
     setPlayersDebtListFiltered(
