@@ -36,8 +36,10 @@ export default function Deudores() {
     for (const player of players) {
       for (const subject of subjects) {
         if (
-          subject.name.toLowerCase().includes('cena') ||
-          subject.name.toLowerCase().includes('cuota')
+          (subject.name.toLowerCase().includes('cena') ||
+            subject.name.toLowerCase().includes('cuota') ||
+            subject.type.toLowerCase().includes('actividad')) &&
+          subject.id === filteredSubject
         ) {
           const hasPaidSubject = await hasPlayerPaidSubject(
             player.id,
@@ -47,6 +49,7 @@ export default function Deudores() {
             subjectsNotPaidByPlayers.push({ player, subject });
         }
       }
+      console.log(subjectsNotPaidByPlayers);
     }
     setPlayersDebtList(subjectsNotPaidByPlayers);
     setPlayersDebtListFiltered(
@@ -96,9 +99,14 @@ export default function Deudores() {
           <option disabled value="">
             Filtrar por asunto
           </option>
-          {subjects.map(({ id, name, type }) => (
-            <option value={id} key={id}>{`${name}`}</option>
-          ))}
+          {subjects.map(({ id, name, type }) => {
+            if (
+              name.toLowerCase().includes('cena') ||
+              name.toLowerCase().includes('cuota') ||
+              type.toLowerCase().includes('actividad')
+            )
+              return <option value={id} key={id}>{`${name}`}</option>;
+          })}
         </select>
 
         {playersDebtListFiltered.length > 0 && (
