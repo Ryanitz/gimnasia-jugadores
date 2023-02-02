@@ -1,12 +1,12 @@
 /* eslint no-use-before-define: 0 */
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from "react";
 import {
   getPlayersRequest,
   getSubjectsRequest,
   hasPlayerPaidSubject,
-} from './api/requests';
-import SectionTitle from './components/sectionTitle';
-import Loading from './components/loading';
+} from "./api/requests";
+import SectionTitle from "./components/sectionTitle";
+import Loading from "./components/loading";
 
 export default function Deudores() {
   const [isLoading, setIsLoading] = useState(false);
@@ -14,9 +14,9 @@ export default function Deudores() {
   const [subjects, setSubjects] = useState([]);
   const [playersDebtList, setPlayersDebtList] = useState([]);
   const [playersDebtListFiltered, setPlayersDebtListFiltered] = useState([]);
-  const [filteredSubject, setFilteredSubject] = useState('');
+  const [filteredSubject, setFilteredSubject] = useState("");
 
-  const feeValues = [0, 1700, 2700, 4000, 6000, 12000];
+  const feeValues = [0, 3500, 5500, 8000, 12000, 24000];
 
   const getPlayers = async () => {
     setPlayers(await getPlayersRequest());
@@ -36,9 +36,9 @@ export default function Deudores() {
     for (const player of players) {
       for (const subject of subjects) {
         if (
-          (subject.name.toLowerCase().includes('cena') ||
-            subject.name.toLowerCase().includes('cuota') ||
-            subject.type.toLowerCase().includes('actividad')) &&
+          (subject.name.toLowerCase().includes("cena") ||
+            subject.name.toLowerCase().includes("cuota") ||
+            subject.type.toLowerCase().includes("actividad")) &&
           subject.id === filteredSubject
         ) {
           const hasPaidSubject = await hasPlayerPaidSubject(
@@ -55,7 +55,7 @@ export default function Deudores() {
     setPlayersDebtListFiltered(
       await subjectsNotPaidByPlayers.filter(
         ({ player, subject }) =>
-          subject.id === filteredSubject || filteredSubject === ''
+          subject.id === filteredSubject || filteredSubject === ""
       )
     );
     setIsLoading(false);
@@ -63,8 +63,8 @@ export default function Deudores() {
 
   useEffect(() => {
     setIsLoading(true);
-    if (!localStorage.getItem('loggedGimnasiaAdmin'))
-      window.location.replace('/');
+    if (!localStorage.getItem("loggedGimnasiaAdmin"))
+      window.location.replace("/");
     else getPlayers();
   }, []);
 
@@ -73,7 +73,7 @@ export default function Deudores() {
       setPlayersDebtListFiltered(
         await playersDebtList.filter(
           ({ player, subject }) =>
-            subject.id === filteredSubject || filteredSubject === ''
+            subject.id === filteredSubject || filteredSubject === ""
         )
       );
     };
@@ -101,9 +101,9 @@ export default function Deudores() {
           </option>
           {subjects.map(({ id, name, type }) => {
             if (
-              name.toLowerCase().includes('cena') ||
-              name.toLowerCase().includes('cuota') ||
-              type.toLowerCase().includes('actividad')
+              name.toLowerCase().includes("cena") ||
+              name.toLowerCase().includes("cuota") ||
+              type.toLowerCase().includes("actividad")
             )
               return <option value={id} key={id}>{`${name}`}</option>;
           })}
@@ -127,8 +127,8 @@ export default function Deudores() {
                   <td>{subject.name}</td>
                   <td className="text-red-500 font-bold">
                     $
-                    {subject.type === 'cuota'
-                      ? feeValues[player.payingType] || ' a definir'
+                    {subject.type === "cuota"
+                      ? feeValues[player.payingType] || " a definir"
                       : subject.amount}
                   </td>
                 </tr>
