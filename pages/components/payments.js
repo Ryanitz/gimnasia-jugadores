@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { useToasts } from 'react-toast-notifications';
+import React, { useState, useEffect } from "react";
+import { useToasts } from "react-toast-notifications";
 import {
   getPlayerPaymentsRequest,
   getPlayersRequest,
@@ -8,9 +8,9 @@ import {
   removePaymentRequest,
   updatePaymentDebtRequest,
   updatePlayerPayingTypeRequest,
-} from '../api/requests';
-import PlayerPayments from './playerPayments';
-import SubjectsTable from './subjectsTable';
+} from "../api/requests";
+import PlayerPayments from "./playerPayments";
+import SubjectsTable from "./subjectsTable";
 
 export default function Payments({ setIsLoading }) {
   const [players, setPlayers] = useState([]);
@@ -20,7 +20,7 @@ export default function Payments({ setIsLoading }) {
   const [payingAmount, setPayingAmount] = useState(0);
   const [playerPayments, setPlayerPayments] = useState([]);
   const [playerSubjectsNotPaid, setPlayerSubjectsNotPaid] = useState([]);
-  const [date, setDate] = useState('');
+  const [date, setDate] = useState("");
 
   const { addToast } = useToasts();
 
@@ -30,12 +30,12 @@ export default function Payments({ setIsLoading }) {
       value = feeValues[players[aPayerIndex].payingType];
     }
     setPayingAmount(value);
-    const amountInput = document.getElementById('amount');
-    if (amountInput) amountInput.value = value !== 0 ? value : '';
+    const amountInput = document.getElementById("amount");
+    if (amountInput) amountInput.value = value !== 0 ? value : "";
   };
   const setPayingAmountNormal = (aSubjectIndex) => {
     setPayingAmount(playerSubjectsNotPaid[aSubjectIndex].amount);
-    const amountInput = document.getElementById('amount');
+    const amountInput = document.getElementById("amount");
     if (amountInput)
       amountInput.value = playerSubjectsNotPaid[aSubjectIndex].amount;
   };
@@ -46,7 +46,7 @@ export default function Payments({ setIsLoading }) {
     excedente: setPayingAmountNormal,
   };
 
-  const feeValues = [0, 1700, 2700, 4000, 6000, 12000];
+  const feeValues = [0, 3500, 5500, 8000, 12000, 24000];
 
   const getPlayers = async () => {
     setPlayers(await getPlayersRequest());
@@ -62,7 +62,7 @@ export default function Payments({ setIsLoading }) {
   };
 
   const registerPayment = async () => {
-    if (payer !== -1 && selectedSubject >= 0 && payingAmount !== '') {
+    if (payer !== -1 && selectedSubject >= 0 && payingAmount !== "") {
       setIsLoading(true);
       const debt = calculateDebt();
 
@@ -78,7 +78,7 @@ export default function Payments({ setIsLoading }) {
       );
 
       addToast(`Pago de "${subject.name}" registrado`, {
-        appearance: 'success',
+        appearance: "success",
       });
 
       setPlayerPayments([...playerPayments, payment]);
@@ -95,7 +95,7 @@ export default function Payments({ setIsLoading }) {
     await removePaymentRequest(players[payer].id, aPaymentId);
 
     addToast(`Pago eliminado`, {
-      appearance: 'success',
+      appearance: "success",
     });
 
     setPlayerPayments(newPlayerPayments);
@@ -111,24 +111,24 @@ export default function Payments({ setIsLoading }) {
     setSelectedSubject(parseInt(aSubjectIndex));
     if (parseInt(aSubjectIndex) !== -1) {
       const type = playerSubjectsNotPaid[aSubjectIndex].type;
-      settingAmount[type](type === 'cuota' ? payer : aSubjectIndex);
+      settingAmount[type](type === "cuota" ? payer : aSubjectIndex);
     }
   };
   const changePayer = (aPayerIndex) => {
     setPayer(aPayerIndex);
     if (selectedSubject !== -1) {
       const type = playerSubjectsNotPaid[selectedSubject].type;
-      settingAmount[type](type === 'cuota' ? aPayerIndex : selectedSubject);
+      settingAmount[type](type === "cuota" ? aPayerIndex : selectedSubject);
     }
   };
 
   const setTodayDate = () => {
     const date = new Date();
-    const dateInput = document.getElementById('date');
-    const day = date.getDate() < 10 ? '0' + date.getDate() : date.getDate();
+    const dateInput = document.getElementById("date");
+    const day = date.getDate() < 10 ? "0" + date.getDate() : date.getDate();
     const month =
       date.getMonth() + 1 < 10
-        ? '0' + (date.getMonth() + 1)
+        ? "0" + (date.getMonth() + 1)
         : date.getMonth() + 1;
 
     dateInput.value = `${date.getFullYear()}-${month}-${day}`;
@@ -136,7 +136,7 @@ export default function Payments({ setIsLoading }) {
   };
 
   const setCustomDate = (aDate) => {
-    const dateSplit = aDate.split('-');
+    const dateSplit = aDate.split("-");
     const date = new Date(
       parseInt(dateSplit[0]),
       parseInt(dateSplit[1]) - 1,
@@ -146,7 +146,7 @@ export default function Payments({ setIsLoading }) {
   };
 
   const calculateDebt = () => {
-    if (playerSubjectsNotPaid[selectedSubject].type !== 'cuota') return 0;
+    if (playerSubjectsNotPaid[selectedSubject].type !== "cuota") return 0;
 
     const payingDate = new Date(date);
     const dueDate = new Date(playerSubjectsNotPaid[selectedSubject].dueDate);
@@ -205,7 +205,7 @@ export default function Payments({ setIsLoading }) {
     if (payer !== -1) {
       setPlayerSubjectsNotPaid(
         subjects.filter((subject) => {
-          return subject.name === 'Excedente' || !hasPaidSubject(subject.name);
+          return subject.name === "Excedente" || !hasPaidSubject(subject.name);
         })
       );
     }
