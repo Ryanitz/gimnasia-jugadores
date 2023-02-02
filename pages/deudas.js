@@ -38,6 +38,20 @@ export default function PlayersList() {
     );
   };
 
+  const hasToPay = (aSubject, aPlayer) => {
+    if (aSubject.payingType && aPlayer.payingType) {
+      return aSubject.payingType >= aPlayer.payingType;
+    } else return true;
+  };
+
+  const getPlayer = () => {
+    let playerObj = null;
+    players.forEach((aPlayer) => {
+      playerObj = aPlayer.id === player ? aPlayer : playerObj;
+    });
+    return playerObj;
+  };
+
   useEffect(() => {
     setIsLoading(true);
     if (!localStorage.getItem("loggedGimnasia")) window.location.replace("/");
@@ -50,9 +64,10 @@ export default function PlayersList() {
 
   useEffect(() => {
     const newDebtSubjects = [];
+    const playerObj = getPlayer();
     subjects.forEach((subject) => {
       if (subject.name !== "Excedente") {
-        if (!isInPayments(subject.name)) {
+        if (!isInPayments(subject.name) && hasToPay(subject, playerObj)) {
           newDebtSubjects.push(subject);
         }
       }
