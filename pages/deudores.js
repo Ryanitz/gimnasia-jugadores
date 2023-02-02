@@ -28,6 +28,12 @@ export default function Deudores() {
     setIsLoading(false);
   };
 
+  const hasToPay = (aSubject, aPlayer) => {
+    if (aSubject.payingType) {
+      return aSubject.payingType >= aPlayer.payingType;
+    } else return true;
+  };
+
   const loadDebtsList = async () => {
     setIsLoading(true);
     const subjectsNotPaidByPlayers = [];
@@ -45,11 +51,10 @@ export default function Deudores() {
             player.id,
             subject.name
           );
-          if (!hasPaidSubject)
+          if (!hasPaidSubject && hasToPay(subject, player))
             subjectsNotPaidByPlayers.push({ player, subject });
         }
       }
-      console.log(subjectsNotPaidByPlayers);
     }
     setPlayersDebtList(subjectsNotPaidByPlayers);
     setPlayersDebtListFiltered(

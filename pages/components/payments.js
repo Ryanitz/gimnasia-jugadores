@@ -191,6 +191,12 @@ export default function Payments({ setIsLoading }) {
     );
   };
 
+  const hasToPay = (aSubject) => {
+    if (aSubject.payingType) {
+      return aSubject.payingType >= players[payer].payingType;
+    } else return true;
+  };
+
   useEffect(() => {
     setIsLoading(true);
     getPlayers();
@@ -205,7 +211,10 @@ export default function Payments({ setIsLoading }) {
     if (payer !== -1) {
       setPlayerSubjectsNotPaid(
         subjects.filter((subject) => {
-          return subject.name === "Excedente" || !hasPaidSubject(subject.name);
+          return (
+            subject.name === "Excedente" ||
+            (!hasPaidSubject(subject.name) && hasToPay(subject))
+          );
         })
       );
     }
