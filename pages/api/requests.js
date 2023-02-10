@@ -130,6 +130,18 @@ const REMOVE_EXPENSE = gql`
     }
   }
 `;
+const ADD_PLAYER_TO_LIST = gql`
+  mutation Mutation($input: [AddPlayerInListInput!]!) {
+    addPlayerInList(input: $input) {
+      playerInList {
+        name
+        surname
+        id
+        listId
+      }
+    }
+  }
+`;
 
 export const getPlayersRequest = async () => {
   const response = await client.query({
@@ -148,6 +160,7 @@ export const getPlayersRequest = async () => {
 
   return players;
 };
+
 export const getSubjectsRequest = async () => {
   const response = await client.query({
     query: GET_SUBJECTS,
@@ -521,4 +534,76 @@ export const updatePaymentDebtRequest = async (
   });
 
   return getPlayerPaymentsRequest(aPlayerId);
+};
+
+export const getPlayersListRequest = async (aPlayersListId) => {
+  const response = await client.query({
+    query: gql`
+      query Query($id: ID!) {
+        getPlayersList(id: $id) {
+          id
+          listName
+        }
+      }
+    `,
+    variables: {
+      id: aPlayersListId,
+    },
+  });
+
+  return response.data.getPlayersList;
+};
+export const addPlayerToListRequest = async (
+  aListId,
+  aPlayerName,
+  aPlayerSurname
+) => {
+  const res = await client.mutate({
+    mutation: ADD_PLAYER_TO_LIST,
+    variables: {
+      input: {
+        listId: aListId,
+        name: aPlayerName,
+        surname: aPlayerSurname,
+      },
+    },
+  });
+  return res.data.addPlayerInList.playerInList[0].id;
+};
+export const getPlayersInListRequest = async (aPlayersListId) => {
+  const response = await client.query({
+    query: gql`
+      query Query($id: String!) {
+        queryPlayerInList(filter: { listId: { allofterms: $id } }) {
+          surname
+          name
+          listId
+          id
+        }
+      }
+    `,
+    variables: {
+      id: aPlayersListId,
+    },
+  });
+
+  return response.data.queryPlayerInList;
+};
+export const removePlayerFromListRequest = async (aPlayerId, aListId) => {
+  const response = await client.mutate({
+    mutation: gql`
+      mutation MyMutation($id: [ID!], $listId: String!) {
+        deletePlayerInList(
+          filter: { id: $id, listId: { allofterms: $listId } }
+        ) {
+          msg
+        }
+      }
+    `,
+    variables: {
+      id: aPlayerId,
+      listId: aListId,
+    },
+  });
+  return response.data.deletePlayerInList.msg;
 };
