@@ -109,6 +109,25 @@ export default function PlayersList() {
     setIsLoading(false);
   };
 
+  const hasSameName = (aName, anotherName, aSurname, anotherSurname) => {
+    return (
+      aName.toLowerCase() === anotherName.toLowerCase() &&
+      aSurname.toLowerCase() === anotherSurname.toLowerCase()
+    );
+  };
+
+  const isInList = (anId, aName, aSurname) => {
+    for (let i = 0; i < list.players.length; i++) {
+      const player = list.players[i];
+      if (
+        anId === player.id ||
+        hasSameName(aName, player.name, aSurname, player.surname)
+      )
+        return true;
+    }
+    return false;
+  };
+
   useEffect(() => {
     setIsLoading(true);
     isValidListId();
@@ -117,7 +136,7 @@ export default function PlayersList() {
   return (
     <div>
       {isLoading && <Loading />}
-      <div className="w-full md:w-3/4 lg:w-1/2 transition-all px-4 pb-16 max-h-screen mx-auto flex flex-col overflow-y-auto">
+      <div className="w-full md:w-3/4 lg:w-1/2 transition-all px-4 pb-16 max-h-screen mx-auto flex flex-col">
         <SectionTitle title={"Lista de " + list.listName} />
 
         <select
@@ -131,7 +150,11 @@ export default function PlayersList() {
           </option>
           <option value={-1}>No estoy en lista</option>
           {players.map(({ id, name, surname }, index) => (
-            <option value={id} key={index}>{`${name} ${surname}`}</option>
+            <option
+              value={id}
+              key={index}
+              className={!isInList(id, name, surname) ? "block" : "hidden"}
+            >{`${name} ${surname}`}</option>
           ))}
         </select>
 
