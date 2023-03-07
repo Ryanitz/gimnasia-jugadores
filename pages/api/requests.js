@@ -368,6 +368,7 @@ export const registerPlayerRequest = async (aPlayerName, aPlayerSurname) => {
       input: {
         name: aPlayerName,
         surname: aPlayerSurname,
+        payingType: 0,
       },
     },
   });

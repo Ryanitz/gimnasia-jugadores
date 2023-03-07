@@ -164,7 +164,7 @@ export default function Payments({ setIsLoading }) {
     let mustPay = feeValues[payingType];
 
     if (payingDate >= dueDate) {
-      mustPay *= 1.05;
+      mustPay *= 1.1;
     }
 
     return mustPay - payingAmount;
