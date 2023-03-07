@@ -6,7 +6,8 @@ export default function Players({ setIsLoading }) {
 
   const removePlayer = async (aPlayerId) => {
     setIsLoading(true);
-    setPlayers(await removePlayerRequest(aPlayerId));
+    const playerIdRemoved = await removePlayerRequest(aPlayerId);
+    setPlayers(players.filter((aPlayer) => playerIdRemoved !== aPlayer.id));
     setIsLoading(false);
   };
 
