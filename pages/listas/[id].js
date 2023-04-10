@@ -5,6 +5,7 @@ import {
   getPlayersInListRequest,
   getPlayersListRequest,
   getPlayersRequest,
+  queryList,
   removePlayerFromListRequest,
 } from "../api/requests";
 import Loading from "../components/loading";
@@ -25,16 +26,14 @@ export default function PlayersList() {
   });
   const [addedPlayers, setAddedPlayers] = useState([]);
 
-  const LIST_ID = "0xfffd8d7273f9d118";
-
-  const getPlayers = async () => {
-    setPlayers(await getPlayersRequest());
-    getPlayersList();
+  const getPlayers = async (aListId) => {
+    setPlayers(await getPlayersRequest(aListId));
+    getPlayersList(aListId);
   };
 
-  const getPlayersList = async () => {
-    const playersListInfo = await getPlayersListRequest(LIST_ID);
-    const playersInList = await getPlayersInListRequest(LIST_ID);
+  const getPlayersList = async (aListId) => {
+    const playersListInfo = await getPlayersListRequest(aListId);
+    const playersInList = await getPlayersInListRequest(aListId);
     setList({
       id: playersListInfo.id,
       listName: playersListInfo.listName,
@@ -47,7 +46,9 @@ export default function PlayersList() {
   };
 
   const isValidListId = async () => {
-    if (window.location.pathname.includes(LIST_ID)) getPlayers();
+    const id = window.location.pathname.split("/listas/")[1];
+    const res = await queryList(id);
+    if (res > 0) getPlayers(id);
     else window.location.replace("/");
   };
 
@@ -64,7 +65,7 @@ export default function PlayersList() {
     if (player) {
       setIsLoading(true);
       const newPlayerId = await addPlayerToListRequest(
-        LIST_ID,
+        list.id,
         player.name,
         player.surname
       );
@@ -158,10 +159,10 @@ export default function PlayersList() {
           ))}
         </select>
 
-        <p className="font-bold mb-2">
+        <p className="font-bold mb-2 hidden">
           Si no estas en la lista anotate aca abajo
         </p>
-        <div className="grid grid-cols-2 gap-4">
+        <div className="grid grid-cols-2 gap-4 hidden">
           <input
             type="text"
             placeholder="Nombre"

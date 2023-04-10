@@ -590,6 +590,23 @@ export const getPlayersInListRequest = async (aPlayersListId) => {
 
   return response.data.queryPlayerInList;
 };
+
+export const queryList = async (aListId) => {
+  const response = await client.query({
+    query: gql`
+      query Query($id: [ID!]) {
+        aggregatePlayersList(filter: { id: $id }) {
+          count
+        }
+      }
+    `,
+    variables: {
+      id: aListId,
+    },
+  });
+  return response.data.aggregatePlayersList.count;
+};
+
 export const removePlayerFromListRequest = async (aPlayerId, aListId) => {
   const response = await client.mutate({
     mutation: gql`
