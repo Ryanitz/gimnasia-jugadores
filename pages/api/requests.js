@@ -575,7 +575,10 @@ export const getPlayersInListRequest = async (aPlayersListId) => {
   const response = await client.query({
     query: gql`
       query Query($id: String!) {
-        queryPlayerInList(filter: { listId: { allofterms: $id } }) {
+        queryPlayerInList(
+          filter: { listId: { allofterms: $id } }
+          order: { asc: surname, then: { asc: name } }
+        ) {
           surname
           name
           listId

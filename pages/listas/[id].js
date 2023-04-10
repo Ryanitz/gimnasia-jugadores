@@ -155,7 +155,7 @@ export default function PlayersList() {
               value={id}
               key={index}
               className={!isInList(id, name, surname) ? "block" : "hidden"}
-            >{`${name} ${surname}`}</option>
+            >{`${surname}, ${name}`}</option>
           ))}
         </select>
 
