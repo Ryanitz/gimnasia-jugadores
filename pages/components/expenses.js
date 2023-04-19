@@ -16,6 +16,8 @@ export default function Expenses({ setIsLoading }) {
   const [finalPrice, setFinalPrice] = useState(0);
   const [players, setPlayers] = useState([]);
 
+  const { addToast } = useToasts();
+
   const getExpensesList = async () => {
     setExpensesList(await getExpensesListRequest());
   };
