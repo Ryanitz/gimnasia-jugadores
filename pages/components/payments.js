@@ -116,10 +116,6 @@ export default function Payments({ setIsLoading }) {
   };
   const changePayer = (aPayerIndex) => {
     setPayer(aPayerIndex);
-    if (selectedSubject !== -1) {
-      const type = playerSubjectsNotPaid[selectedSubject].type;
-      settingAmount[type](type === "cuota" ? aPayerIndex : selectedSubject);
-    }
   };
 
   const setTodayDate = () => {
@@ -219,6 +215,13 @@ export default function Payments({ setIsLoading }) {
       );
     }
   }, [playerPayments]);
+
+  useEffect(() => {
+    if (selectedSubject !== -1) {
+      const type = playerSubjectsNotPaid[selectedSubject].type;
+      settingAmount[type](type === "cuota" ? payer : selectedSubject);
+    }
+  }, [playerSubjectsNotPaid]);
 
   return (
     <div className="w-full md:w-3/4 lg:w-1/2 transition-all pb-16 mx-auto flex flex-col overflow-y-auto">
